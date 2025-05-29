@@ -37,7 +37,7 @@ public class ProductoController {
     }
 
     @GetMapping("/stock")
-    public List<Producto> buscarPorStockMenorA(@RequestParam Integer maxStock) {
+    public List<Producto> buscarPorStockMenorA(@RequestParam("max") Integer maxStock) {
         return productoService.buscarPorStockMenorA(maxStock);
     }
 

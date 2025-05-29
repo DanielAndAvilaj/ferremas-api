@@ -14,7 +14,7 @@ public class Precio {
     private LocalDate fecha;
     private Double valor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producto_id")
     @JsonBackReference
     private Producto producto;
