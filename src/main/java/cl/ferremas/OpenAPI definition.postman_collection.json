@@ -1,0 +1,1042 @@
+{
+	"info": {
+		"_postman_id": "6698e3db-dfb1-4819-9814-eb97cb90bc96",
+		"name": "OpenAPI definition",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44726262",
+		"_collection_link": "https://martian-star-2792729.postman.co/workspace/Daniel-%C3%81vila's-Workspace~accbc79c-ab6c-4c97-8c8d-2db49e2110ae/collection/44726262-6698e3db-dfb1-4819-9814-eb97cb90bc96?action=share&source=collection_link&creator=44726262"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "productos",
+					"item": [
+						{
+							"name": "stock",
+							"item": [
+								{
+									"name": "buscar Por Stock Menor A",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/productos/stock?maxStock=100",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"productos",
+												"stock"
+											],
+											"query": [
+												{
+													"key": "maxStock",
+													"value": "100",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/productos/stock?maxStock=-63048218",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"productos",
+														"stock"
+													],
+													"query": [
+														{
+															"key": "maxStock",
+															"value": "-63048218",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": -83278360,\n    \"codigo\": \"ullamco ut sunt laboris\",\n    \"marca\": \"fugiat ad et eiusmod\",\n    \"nombre\": \"deserunt cillum mollit in in\",\n    \"categoria\": \"officia dolore Lorem reprehenderit\",\n    \"stock\": -71818994,\n    \"precios\": [\n      {\n        \"id\": -81978129,\n        \"fecha\": \"1963-02-20\",\n        \"valor\": -79948082.34186004,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": -4561370,\n        \"fecha\": \"1949-01-06\",\n        \"valor\": -73825978.49941383,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": 60851135,\n    \"codigo\": \"non\",\n    \"marca\": \"sunt magna aliquip\",\n    \"nombre\": \"nulla aliquip irure\",\n    \"categoria\": \"in\",\n    \"stock\": 16225352,\n    \"precios\": [\n      {\n        \"id\": 81815813,\n        \"fecha\": \"1993-09-12\",\n        \"valor\": 19397521.597453788,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": 14230090,\n        \"fecha\": \"1992-05-30\",\n        \"valor\": 64806584.25151783,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  }\n]"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "nombre",
+							"item": [
+								{
+									"name": "buscar Por Nombre",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/productos/nombre?nombre=taladro",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"productos",
+												"nombre"
+											],
+											"query": [
+												{
+													"key": "nombre",
+													"value": "taladro",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/productos/nombre?nombre=ut quis consequat reprehenderit",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"productos",
+														"nombre"
+													],
+													"query": [
+														{
+															"key": "nombre",
+															"value": "ut quis consequat reprehenderit",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": -83278360,\n    \"codigo\": \"ullamco ut sunt laboris\",\n    \"marca\": \"fugiat ad et eiusmod\",\n    \"nombre\": \"deserunt cillum mollit in in\",\n    \"categoria\": \"officia dolore Lorem reprehenderit\",\n    \"stock\": -71818994,\n    \"precios\": [\n      {\n        \"id\": -81978129,\n        \"fecha\": \"1963-02-20\",\n        \"valor\": -79948082.34186004,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": -4561370,\n        \"fecha\": \"1949-01-06\",\n        \"valor\": -73825978.49941383,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": 60851135,\n    \"codigo\": \"non\",\n    \"marca\": \"sunt magna aliquip\",\n    \"nombre\": \"nulla aliquip irure\",\n    \"categoria\": \"in\",\n    \"stock\": 16225352,\n    \"precios\": [\n      {\n        \"id\": 81815813,\n        \"fecha\": \"1993-09-12\",\n        \"valor\": 19397521.597453788,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": 14230090,\n        \"fecha\": \"1992-05-30\",\n        \"valor\": 64806584.25151783,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  }\n]"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "codigo",
+							"item": [
+								{
+									"name": "{codigo}",
+									"item": [
+										{
+											"name": "buscar Por Codigo",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/productos/codigo/:codigo",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"productos",
+														"codigo",
+														":codigo"
+													],
+													"variable": [
+														{
+															"key": "codigo",
+															"value": "COD001",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/productos/codigo/:codigo",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"productos",
+																"codigo",
+																":codigo"
+															],
+															"variable": [
+																{
+																	"key": "codigo"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"id\": -57117633,\n  \"codigo\": \"magna anim elit sunt\",\n  \"marca\": \"in nisi occaecat velit est\",\n  \"nombre\": \"ipsum nulla est\",\n  \"categoria\": \"ut ipsum elit\",\n  \"stock\": -24945817,\n  \"precios\": [\n    {\n      \"id\": -74454791,\n      \"fecha\": \"2011-04-17\",\n      \"valor\": 8075248.445476159,\n      \"producto\": {\n        \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n      }\n    },\n    {\n      \"id\": -38356857,\n      \"fecha\": \"1960-06-18\",\n      \"valor\": -66547926.05493425,\n      \"producto\": {\n        \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n      }\n    }\n  ]\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "categoria",
+							"item": [
+								{
+									"name": "buscar Por Categoria",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/productos/categoria?categoria=HERRAMIENTAS ELÉCTRICAS",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"productos",
+												"categoria"
+											],
+											"query": [
+												{
+													"key": "categoria",
+													"value": "HERRAMIENTAS ELÉCTRICAS",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/productos/categoria?categoria=ut quis consequat reprehenderit",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"productos",
+														"categoria"
+													],
+													"query": [
+														{
+															"key": "categoria",
+															"value": "ut quis consequat reprehenderit",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": -83278360,\n    \"codigo\": \"ullamco ut sunt laboris\",\n    \"marca\": \"fugiat ad et eiusmod\",\n    \"nombre\": \"deserunt cillum mollit in in\",\n    \"categoria\": \"officia dolore Lorem reprehenderit\",\n    \"stock\": -71818994,\n    \"precios\": [\n      {\n        \"id\": -81978129,\n        \"fecha\": \"1963-02-20\",\n        \"valor\": -79948082.34186004,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": -4561370,\n        \"fecha\": \"1949-01-06\",\n        \"valor\": -73825978.49941383,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": 60851135,\n    \"codigo\": \"non\",\n    \"marca\": \"sunt magna aliquip\",\n    \"nombre\": \"nulla aliquip irure\",\n    \"categoria\": \"in\",\n    \"stock\": 16225352,\n    \"precios\": [\n      {\n        \"id\": 81815813,\n        \"fecha\": \"1993-09-12\",\n        \"valor\": 19397521.597453788,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": 14230090,\n        \"fecha\": \"1992-05-30\",\n        \"valor\": 64806584.25151783,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  }\n]"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "obtener Todos",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/productos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"productos"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/productos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"productos"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"id\": -83278360,\n    \"codigo\": \"ullamco ut sunt laboris\",\n    \"marca\": \"fugiat ad et eiusmod\",\n    \"nombre\": \"deserunt cillum mollit in in\",\n    \"categoria\": \"officia dolore Lorem reprehenderit\",\n    \"stock\": -71818994,\n    \"precios\": [\n      {\n        \"id\": -81978129,\n        \"fecha\": \"1963-02-20\",\n        \"valor\": -79948082.34186004,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": -4561370,\n        \"fecha\": \"1949-01-06\",\n        \"valor\": -73825978.49941383,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": 60851135,\n    \"codigo\": \"non\",\n    \"marca\": \"sunt magna aliquip\",\n    \"nombre\": \"nulla aliquip irure\",\n    \"categoria\": \"in\",\n    \"stock\": 16225352,\n    \"precios\": [\n      {\n        \"id\": 81815813,\n        \"fecha\": \"1993-09-12\",\n        \"valor\": 19397521.597453788,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      },\n      {\n        \"id\": 14230090,\n        \"fecha\": \"1992-05-30\",\n        \"valor\": 64806584.25151783,\n        \"producto\": {\n          \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n        }\n      }\n    ]\n  }\n]"
+								}
+							]
+						},
+						{
+							"name": "crear Producto",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"codigo\": \"P002\",\n  \"marca\": \"Bosch\",\n  \"nombre\": \"Sierra Circular Profesional GKS 190\",\n  \"categoria\": \"Corte y Carpintería\",\n  \"stock\": 25,\n  \"precios\": [\n    {\n      \"fecha\": \"2025-05-29\",\n      \"valor\": 129990\n    }\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/productos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"productos"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"id\": -57117633,\n  \"codigo\": \"magna anim elit sunt\",\n  \"marca\": \"in nisi occaecat velit est\",\n  \"nombre\": \"ipsum nulla est\",\n  \"categoria\": \"ut ipsum elit\",\n  \"stock\": -24945817,\n  \"precios\": [\n    {\n      \"id\": -74454791,\n      \"fecha\": \"2011-04-17\",\n      \"valor\": 8075248.445476159,\n      \"producto\": {\n        \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n      }\n    },\n    {\n      \"id\": -38356857,\n      \"fecha\": \"1960-06-18\",\n      \"valor\": -66547926.05493425,\n      \"producto\": {\n        \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n      }\n    }\n  ]\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/productos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"productos"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": -57117633,\n  \"codigo\": \"magna anim elit sunt\",\n  \"marca\": \"in nisi occaecat velit est\",\n  \"nombre\": \"ipsum nulla est\",\n  \"categoria\": \"ut ipsum elit\",\n  \"stock\": -24945817,\n  \"precios\": [\n    {\n      \"id\": -74454791,\n      \"fecha\": \"2011-04-17\",\n      \"valor\": 8075248.445476159,\n      \"producto\": {\n        \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n      }\n    },\n    {\n      \"id\": -38356857,\n      \"fecha\": \"1960-06-18\",\n      \"valor\": -66547926.05493425,\n      \"producto\": {\n        \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n      }\n    }\n  ]\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "precios",
+					"item": [
+						{
+							"name": "{codigoProducto}",
+							"item": [
+								{
+									"name": "obtener Precios",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/precios/:codigoProducto",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"precios",
+												":codigoProducto"
+											],
+											"variable": [
+												{
+													"key": "codigoProducto",
+													"value": "COD001",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/precios/:codigoProducto",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"precios",
+														":codigoProducto"
+													],
+													"variable": [
+														{
+															"key": "codigoProducto"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": 58746997,\n    \"fecha\": \"2000-06-22\",\n    \"valor\": 27382912.097261027,\n    \"producto\": {\n      \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n    }\n  },\n  {\n    \"id\": 92355755,\n    \"fecha\": \"1972-06-14\",\n    \"valor\": -61637812.81766427,\n    \"producto\": {\n      \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n    }\n  }\n]"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "agregar Precio",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"fecha\": \"2025-05-29\",\n  \"valor\": 94990,\n  \"producto\": {\n    \"id\": 1\n  }\n}\n",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/precios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"precios"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"id\": -20533496,\n  \"fecha\": \"1945-07-18\",\n  \"valor\": 30985937.308525413,\n  \"producto\": {\n    \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/precios",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"precios"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": -20533496,\n  \"fecha\": \"1945-07-18\",\n  \"valor\": 30985937.308525413,\n  \"producto\": {\n    \"value\": \"<Circular reference to #/components/schemas/Producto detected>\"\n  }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "pago",
+					"item": [
+						{
+							"name": "iniciar",
+							"item": [
+								{
+									"name": "iniciar Pago",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"monto\": 1000\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/pago/iniciar?monto=",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"pago",
+												"iniciar"
+											],
+											"query": [
+												{
+													"key": "monto",
+													"value": "",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/pago/iniciar?monto=639532.0336490571",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"pago",
+														"iniciar"
+													],
+													"query": [
+														{
+															"key": "monto",
+															"value": "639532.0336490571",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"cillum_\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "confirmar",
+							"item": [
+								{
+									"name": "confirmar Pago Get",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/pago/confirmar?token_ws=01abfa1752296a043fff3d5939aa75642ad71dae596c11d7d3443fadd3e01efe",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"pago",
+												"confirmar"
+											],
+											"query": [
+												{
+													"key": "token_ws",
+													"value": "01abfa1752296a043fff3d5939aa75642ad71dae596c11d7d3443fadd3e01efe",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/pago/confirmar?token_ws=ut quis consequat reprehenderit",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"pago",
+														"confirmar"
+													],
+													"query": [
+														{
+															"key": "token_ws",
+															"value": "ut quis consequat reprehenderit",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"cillum_\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "confirmar Pago Post",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/pago/confirmar?token_ws=01abfa1752296a043fff3d5939aa75642ad71dae596c11d7d3443fadd3e01efe",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"pago",
+												"confirmar"
+											],
+											"query": [
+												{
+													"key": "token_ws",
+													"value": "01abfa1752296a043fff3d5939aa75642ad71dae596c11d7d3443fadd3e01efe",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/pago/confirmar?token_ws=ut quis consequat reprehenderit",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"pago",
+														"confirmar"
+													],
+													"query": [
+														{
+															"key": "token_ws",
+															"value": "ut quis consequat reprehenderit",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"cillum_\": {}\n}"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "divisa",
+					"item": [
+						{
+							"name": "dolar",
+							"item": [
+								{
+									"name": "obtener Valor Dolar",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/divisa/dolar",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"divisa",
+												"dolar"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/divisa/dolar",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"divisa",
+														"dolar"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "639532.0336490571"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "convertir",
+							"item": [
+								{
+									"name": "convertir A Pesos",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/divisa/convertir?monto=900000",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"divisa",
+												"convertir"
+											],
+											"query": [
+												{
+													"key": "monto",
+													"value": "900000",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/divisa/convertir?monto=639532.0336490571",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"divisa",
+														"convertir"
+													],
+													"query": [
+														{
+															"key": "monto",
+															"value": "639532.0336490571",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "639532.0336490571"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		}
+	]
+}

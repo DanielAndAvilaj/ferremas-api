@@ -26,38 +26,46 @@ public class PagoService {
                 .build();
     }
 
+    // Inicia la transacción, asegurándose de que el monto sea en centavos
     public Mono<Map<String, Object>> iniciarTransaccion(Double monto) {
-    String buyOrder = UUID.randomUUID().toString().substring(0, 26);
-    String sessionId = UUID.randomUUID().toString().substring(0, 26);
+        String buyOrder = UUID.randomUUID().toString().substring(0, 26);
+        String sessionId = UUID.randomUUID().toString().substring(0, 26);
 
-    Map<String, Object> payload = new HashMap<>();
-    payload.put("buy_order", buyOrder);
-    payload.put("session_id", sessionId);
-    payload.put("amount", monto);
-    payload.put("return_url", RETURN_URL);
+        // Convertir el monto a centavos
+        int montoEnCentavos = (int) (monto * 100); // Multiplicar por 100 para convertirlo a centavos
 
-    return webClient.post()
-            .uri("/transactions")
-            .header("Tbk-Api-Key-Id", COMMERCE_CODE)
-            .header("Tbk-Api-Key-Secret", API_KEY)
-            .bodyValue(payload)
-            .retrieve()
-            .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-            .map(response -> {
-                String token = (String) response.get("token");
-                String url = (String) response.get("url");
-                response.put("full_url", url + "?token_ws=" + token);
-                return response;
-            });
-}
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("buy_order", buyOrder);
+        payload.put("session_id", sessionId);
+        payload.put("amount", montoEnCentavos);  // Aquí se envía el monto en centavos
+        payload.put("return_url", RETURN_URL);
 
+        return webClient.post()
+                .uri("/transactions")
+                .header("Tbk-Api-Key-Id", COMMERCE_CODE)
+                .header("Tbk-Api-Key-Secret", API_KEY)
+                .bodyValue(payload)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .map(response -> {
+                    String token = (String) response.get("token");
+                    String url = (String) response.get("url");
+                    response.put("full_url", url + "?token_ws=" + token);
+                    return response;
+                });
+    }
 
+    // Confirma la transacción con el token recibido
     public Mono<Map<String, Object>> confirmarTransaccion(String token) {
         return webClient.put()
                 .uri("/transactions/{token}", token)
                 .header("Tbk-Api-Key-Id", COMMERCE_CODE)
                 .header("Tbk-Api-Key-Secret", API_KEY)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {});
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .map(response -> {
+                    // Aquí puedes manejar la respuesta de WebPay para confirmar el pago
+                    return response;
+                });
     }
 }

@@ -19,11 +19,12 @@ public class PagoController {
 
     /**
      * Inicia una transacción en Webpay Plus
-     * @param monto Monto a pagar
+     * @param body JSON con el monto a pagar (ej: {"monto": 1000})
      * @return Respuesta con URL y token
      */
     @PostMapping("/iniciar")
-    public Mono<ResponseEntity<Map<String, Object>>> iniciarPago(@RequestParam Double monto) {
+    public Mono<ResponseEntity<Map<String, Object>>> iniciarPago(@RequestBody Map<String, Object> body) {
+        Double monto = Double.valueOf(body.get("monto").toString());
         return pagoService.iniciarTransaccion(monto)
                 .map(ResponseEntity::ok);
     }
