@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas - Iniciar Sesión</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">🔧 FERREMAS</div>
+            <h2>Iniciar Sesión</h2>
+            
+            <!-- Mostrar errores si los hay -->
+            <div th:if="${error}" class="alert alert-danger">
+                <span th:text="${error}">Error message</span>
+            </div>
+            
+            <!-- Mostrar mensaje de éxito si viene del registro -->
+            <div th:if="${success}" class="alert alert-success">
+                <span th:text="${success}">Success message</span>
+            </div>
+            
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username">Usuario o Email:</label>
+                    <input type="text" 
+                           id="username" 
+                           name="username" 
+                           class="form-control" 
+                           placeholder="Ingresa tu usuario o email"
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           class="form-control" 
+                           placeholder="Ingresa tu contraseña"
+                           required>
+                </div>
+                
+                <button type="submit" class="btn">Iniciar Sesión</button>
+            </form>
+            
+            <div style="margin-top: 20px;">
+                <a th:href="@{/register}" class="link">¿No tienes cuenta? Regístrate aquí</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

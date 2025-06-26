@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas - Registro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">🔧 FERREMAS</div>
+            <h2>Crear Cuenta</h2>
+            
+            <!-- Mostrar errores si los hay -->
+            <div th:if="${error}" class="alert alert-danger">
+                <span th:text="${error}">Error message</span>
+            </div>
+            
+            <form th:action="@{/register}" method="post">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" 
+                           id="nombre" 
+                           name="nombre" 
+                           class="form-control" 
+                           placeholder="Ingresa tu nombre completo"
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           class="form-control" 
+                           placeholder="ejemplo@correo.com"
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           class="form-control" 
+                           placeholder="Mínimo 6 caracteres"
+                           minlength="6"
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña:</label>
+                    <input type="password" 
+                           id="confirmPassword" 
+                           name="confirmPassword" 
+                           class="form-control" 
+                           placeholder="Repite tu contraseña"
+                           minlength="6"
+                           required>
+                </div>
+                
+                <button type="submit" class="btn">Crear Cuenta</button>
+            </form>
+            
+            <div style="margin-top: 20px;">
+                <a th:href="@{/login}" class="link">¿Ya tienes cuenta? Inicia sesión aquí</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Validar que las contraseñas coincidan
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Las contraseñas no coinciden');
+            }
+        });
+    </script>
+</body>
+</html>

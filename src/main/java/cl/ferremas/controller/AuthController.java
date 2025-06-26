@@ -4,7 +4,6 @@ import cl.ferremas.dto.LoginRequest;
 import cl.ferremas.dto.LoginResponse;
 import cl.ferremas.model.Usuario;
 import cl.ferremas.service.UsuarioService;
-import cl.ferremas.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

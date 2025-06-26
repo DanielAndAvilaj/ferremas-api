@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${producto.id != null ? 'Editar Producto' : 'Nuevo Producto'} + ' - FERREMAS'">Producto - FERREMAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-logout {
+            background: #ff6b6b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            border-left: 4px solid #ff5252;
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            border-left: 4px solid #4caf50;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-input:invalid {
+            border-color: #ff6b6b;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 3rem;
+        }
+
+        /* Field Icons */
+        .field-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon .form-input {
+            padding-left: 3rem;
+        }
+
+        /* Validation Messages */
+        .field-error {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .field-success {
+            color: #4CAF50;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 36px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 36px rgba(108, 117, 125, 0.4);
+        }
+
+        /* Loading State */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Preview Section */
+        .preview-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .preview-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .preview-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .preview-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .preview-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">🔧 FERREMAS - ADMIN</div>
+        <div class="nav-links">
+            <a href="/admin" class="nav-link">Dashboard</a>
+            <a href="/admin/productos" class="nav-link">Productos</a>
+            <a href="/logout" class="btn-logout">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title" th:text="${producto.id != null ? 'Editar Producto' : 'Nuevo Producto'}">Nuevo Producto</h1>
+            <p class="page-subtitle" th:text="${producto.id != null ? 'Modifica la información del producto' : 'Completa los datos del nuevo producto'}">Completa los datos del nuevo producto</p>
+        </div>
+
+        <!-- Alert Messages -->
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <h2 class="form-title" th:text="${producto.id != null ? '✏️ Editar Producto' : '➕ Agregar Producto'}">➕ Agregar Producto</h2>
+
+            <!-- ✅ SIMPLIFICADO: Form sin validación JavaScript conflictiva -->
+            <form th:action="${producto.id != null ? '/admin/productos/' + producto.id : '/admin/productos'}" 
+                  th:object="${producto}" 
+                  method="post" 
+                  id="productForm">
+
+                <div class="form-grid">
+                    <!-- Código del Producto -->
+                    <div class="form-group">
+                        <label for="codigo" class="form-label">📝 Código del Producto *</label>
+                        <div class="input-with-icon">
+                            <span class="field-icon">🏷️</span>
+                            <input type="text" 
+                                   id="codigo" 
+                                   th:field="*{codigo}" 
+                                   class="form-input" 
+                                   placeholder="Ej: HERR001" 
+                                   required 
+                                   maxlength="20"
+                                   oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <!-- Nombre del Producto -->
+                    <div class="form-group">
+                        <label for="nombre" class="form-label">📦 Nombre del Producto *</label>
+                        <div class="input-with-icon">
+                            <span class="field-icon">📝</span>
+                            <input type="text" 
+                                   id="nombre" 
+                                   th:field="*{nombre}" 
+                                   class="form-input" 
+                                   placeholder="Ej: Martillo de Goma" 
+                                   required 
+                                   maxlength="100"
+                                   oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <!-- ✅ CAMPO MARCA -->
+                    <div class="form-group">
+                        <label for="marca" class="form-label">🏢 Marca *</label>
+                        <div class="input-with-icon">
+                            <span class="field-icon">🏷️</span>
+                            <input type="text" 
+                                   id="marca" 
+                                   th:field="*{marca}" 
+                                   class="form-input" 
+                                   placeholder="Ej: Bahco, Bosch, Stanley" 
+                                   required 
+                                   maxlength="50"
+                                   oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <!-- Categoría -->
+                    <div class="form-group">
+                        <label for="categoria" class="form-label">🏷️ Categoría *</label>
+                        <select id="categoria" 
+                                th:field="*{categoria}" 
+                                class="form-input form-select" 
+                                required 
+                                onchange="updatePreview()">
+                            <option value="">Selecciona una categoría</option>
+                            <option value="Herramientas">🔨 Herramientas</option>
+                            <option value="Materiales">🧱 Materiales</option>
+                            <option value="Electricidad">⚡ Electricidad</option>
+                            <option value="Plomería">🚿 Plomería</option>
+                            <option value="Jardinería">🌱 Jardinería</option>
+                            <option value="Seguridad">🦺 Seguridad</option>
+                            <option value="Pintura">🎨 Pintura</option>
+                            <option value="Ferretería">🔩 Ferretería</option>
+                        </select>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="form-group">
+                        <label for="stock" class="form-label">📊 Stock *</label>
+                        <div class="input-with-icon">
+                            <span class="field-icon">📦</span>
+                            <input type="number" 
+                                   id="stock" 
+                                   th:field="*{stock}" 
+                                   class="form-input" 
+                                   placeholder="0" 
+                                   required 
+                                   min="0" 
+                                   max="9999"
+                                   oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <!-- ✅ PRECIO CORREGIDO: Sin min="0" que causa problemas -->
+                    <div class="form-group">
+                        <label for="precio" class="form-label">💰 Precio *</label>
+                        <div class="input-with-icon">
+                            <span class="field-icon">$</span>
+                            <input type="number" 
+                                   id="precio" 
+                                   th:field="*{precio}" 
+                                   class="form-input" 
+                                   placeholder="Ej: 15990" 
+                                   required 
+                                   step="0.01"
+                                   oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group full-width">
+                        <label for="descripcion" class="form-label">📄 Descripción</label>
+                        <textarea id="descripcion" 
+                                  th:field="*{descripcion}" 
+                                  class="form-input form-textarea" 
+                                  placeholder="Descripción detallada del producto (opcional)"
+                                  maxlength="500"
+                                  oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="preview-section">
+                    <div class="preview-title">🔍 Vista Previa del Producto</div>
+                    <div class="preview-content">
+                        <div class="preview-item">
+                            <div class="preview-label">Código</div>
+                            <div class="preview-value" id="previewCodigo">-</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">Nombre</div>
+                            <div class="preview-value" id="previewNombre">-</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">Marca</div>
+                            <div class="preview-value" id="previewMarca">-</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">Categoría</div>
+                            <div class="preview-value" id="previewCategoria">-</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">Stock</div>
+                            <div class="preview-value" id="previewStock">-</div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-label">Precio</div>
+                            <div class="preview-value" id="previewPrecio">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="/admin/productos" class="btn btn-secondary">
+                        ↩️ Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span th:text="${producto.id != null ? '💾 Actualizar' : '💾 Guardar'}">💾 Guardar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ✅ SIMPLIFICADO: Solo preview, sin validación conflictiva
+        function updatePreview() {
+            const codigo = document.getElementById('codigo').value || '-';
+            const nombre = document.getElementById('nombre').value || '-';
+            const marca = document.getElementById('marca').value || '-';
+            const categoria = document.getElementById('categoria').value || '-';
+            const stock = document.getElementById('stock').value || '-';
+            const precio = document.getElementById('precio').value || '-';
+
+            document.getElementById('previewCodigo').textContent = codigo;
+            document.getElementById('previewNombre').textContent = nombre;
+            document.getElementById('previewMarca').textContent = marca;
+            document.getElementById('previewCategoria').textContent = categoria;
+            document.getElementById('previewStock').textContent = stock;
+            document.getElementById('previewPrecio').textContent = precio !== '-' ? `$${parseFloat(precio).toLocaleString()}` : '-';
+        }
+
+        // Initialize preview on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+        });
+
+        // ✅ LOADING SIMPLE sin validación previa
+        document.getElementById('productForm').addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+        });
+    </script>
+</body>
+</html>
