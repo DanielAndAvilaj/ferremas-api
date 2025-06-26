@@ -38,4 +38,14 @@ public class ProductoService {
     public Producto guardarProducto(Producto producto) {
         return productoRepository.save(producto);
     }
+
+    public void eliminarProducto(Long id) {
+        productoRepository.deleteById(id);
+    }
+
+    // AGREGAR ESTE MÉTODO:
+    public Producto obtenerPorId(Long id) {
+        return productoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    }
 }

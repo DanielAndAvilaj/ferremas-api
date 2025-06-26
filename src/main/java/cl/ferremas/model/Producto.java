@@ -2,8 +2,6 @@ package cl.ferremas.model;
 
 import jakarta.persistence.*;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -20,15 +18,14 @@ public class Producto {
     private Integer stock;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-@JsonIgnoreProperties("producto")
-private List<Precio> precios;
+    @JsonManagedReference
+    private List<Precio> precios;
 
-@OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-@JsonIgnoreProperties("producto")
-private List<StockSucursal> stocksSucursal;
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<StockSucursal> stocksSucursal;
 
     // Getters y Setters
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

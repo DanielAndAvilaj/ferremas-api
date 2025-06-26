@@ -3,7 +3,6 @@ package cl.ferremas.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Precio {
@@ -15,14 +14,12 @@ public class Precio {
     private LocalDate fecha;
     private Double valor;
 
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "producto_id")
-@JsonIgnoreProperties({"precios", "stocksSucursal"})
-private Producto producto;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producto_id")
+    @JsonBackReference
+    private Producto producto;
 
     // Getters y Setters
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -25,11 +24,16 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public Usuario registrarUsuario(Usuario usuario) {
-        // La codificación debe hacerse fuera, por ejemplo, en el controlador
+        // La codificación de la contraseña se hace en el controlador antes de llamar aquí
         return usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> buscarPorUsername(String username) {
         return usuarioRepository.findByUsername(username);
+    }
+
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
     }
 }

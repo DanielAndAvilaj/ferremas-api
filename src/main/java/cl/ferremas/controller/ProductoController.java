@@ -2,9 +2,11 @@ package cl.ferremas.controller;
 
 import cl.ferremas.model.Producto;
 import cl.ferremas.service.ProductoService;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -43,6 +45,29 @@ public class ProductoController {
 
     @PostMapping
     public Producto crearProducto(@RequestBody Producto producto) {
+        return productoService.guardarProducto(producto);
+    }
+
+    @PostMapping("/batch")
+    public List<Producto> crearProductos(@RequestBody List<Producto> productos) {
+        return productos.stream()
+            .map(productoService::guardarProducto)
+            .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarProducto(@PathVariable Long id) {
+        try {
+            productoService.eliminarProducto(id);
+            return ResponseEntity.ok("Producto con ID " + id + " eliminado exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public Producto actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
+        producto.setId(id);
         return productoService.guardarProducto(producto);
     }
 }

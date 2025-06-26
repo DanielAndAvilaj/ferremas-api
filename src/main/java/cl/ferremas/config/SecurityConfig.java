@@ -35,17 +35,23 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Permitir el registro sin autenticación
+                // Permitir registro y login sin autenticación
                 .requestMatchers("/api/usuarios/registrar").permitAll()
-
-                // Permitir lectura de productos y precios a ADMIN y USER
+                .requestMatchers("/api/auth/**").permitAll()
+                
+                // Permitir lectura productos y precios solo a ADMIN y USER
                 .requestMatchers(HttpMethod.GET, "/api/productos/**").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.GET, "/api/precios/**").hasAnyRole("ADMIN", "USER")
-
-                // Permitir escritura solo a ADMIN
-                .requestMatchers("/api/productos/**", "/api/precios/**").hasRole("ADMIN")
-
-                // Todo lo demás requiere autenticación
+                
+                // Permitir escritura solo a ADMIN (POST, PUT, DELETE, etc.)
+                .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/precios/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/precios/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/precios/**").hasRole("ADMIN")
+                
+                // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
             )
             .userDetailsService(usuarioService)
