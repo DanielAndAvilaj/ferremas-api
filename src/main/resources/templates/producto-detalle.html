@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${producto.nombre}">Detalle de Producto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .detalle-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .galeria {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .galeria-principal {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .galeria-thumbs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .galeria-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .galeria-thumb:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .galeria-thumb.selected {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        .detalle-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .detalle-info h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detalle-marca {
+            font-size: 1.2rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .detalle-categoria {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            width: fit-content;
+        }
+        
+        .detalle-desc {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .detalle-precios {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .detalle-precio-clp {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .detalle-precio-usd {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        
+        .detalle-stock {
+            margin: 1rem 0;
+        }
+        
+        .stock-badge {
+            background: #27ae60;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .stock-badge.stock-zero {
+            background: #e74c3c;
+        }
+        
+        .detalle-acciones {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .btn-fav {
+            background: #fff;
+            border: 2px solid #ddd;
+            color: #999;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-fav:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .btn-fav.fav-active {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .btn-carrito {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .btn-carrito:hover:not(:disabled) {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-carrito:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .btn-volver {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+            width: fit-content;
+        }
+        
+        .btn-volver:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .detalle-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .detalle-info h1 {
+                font-size: 2rem;
+            }
+            
+            .detalle-acciones {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">🔧 FERREMAS</a>
+            <a href="/catalogo" class="btn-volver">← Volver al catálogo</a>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        <div class="detalle-container" th:if="${producto}">
+            <div class="galeria">
+                <img id="imgPrincipal" th:src="@{'/img/productos/' + ${producto.codigo} + '-1.jpg'}" 
+                     onerror="this.src='/img/productos/default.jpg'" class="galeria-principal" 
+                     th:alt="${producto.nombre}">
+                <div class="galeria-thumbs">
+                    <img th:src="@{'/img/productos/' + ${producto.codigo} + '-1.jpg'}" 
+                         onclick="cambiarImagen(this)" class="galeria-thumb selected" 
+                         onerror="this.src='/img/productos/default.jpg'" alt="Miniatura 1">
+                    <img th:src="@{'/img/productos/' + ${producto.codigo} + '-2.jpg'}" 
+                         onclick="cambiarImagen(this)" class="galeria-thumb" 
+                         onerror="this.src='/img/productos/default.jpg'" alt="Miniatura 2">
+                    <img th:src="@{'/img/productos/' + ${producto.codigo} + '-3.jpg'}" 
+                         onclick="cambiarImagen(this)" class="galeria-thumb" 
+                         onerror="this.src='/img/productos/default.jpg'" alt="Miniatura 3">
+                </div>
+            </div>
+            
+            <div class="detalle-info">
+                <h1 th:text="${producto.nombre}">Nombre del producto</h1>
+                <div class="detalle-marca" th:text="${producto.marca}">Marca</div>
+                <div class="detalle-categoria" th:text="${producto.categoria}">Categoría</div>
+                <div class="detalle-desc" th:text="${producto.descripcion}">Descripción</div>
+                
+                <div class="detalle-precios">
+                    <span class="detalle-precio-clp" th:text="'CLP $' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">CLP $0</span>
+                    <span class="detalle-precio-usd" th:if="${valorDolar}" 
+                          th:text="'USD $' + ${#numbers.formatDecimal(producto.precio / valorDolar, 1, 'COMMA', 1, 'POINT')}">USD $0</span>
+                </div>
+                
+                <div class="detalle-stock" th:if="${producto.stock > 0}">
+                    <span class="stock-badge">En stock: <span th:text="${producto.stock}">0</span></span>
+                </div>
+                <div class="detalle-stock" th:if="${producto.stock == 0}">
+                    <span class="stock-badge stock-zero">Sin stock</span>
+                </div>
+                
+                <div class="detalle-acciones">
+                    <button class="btn-fav" th:classappend="${producto.favorito} ? 'fav-active' : ''" 
+                            th:attr="data-id=${producto.id}" title="Agregar/Quitar de favoritos" 
+                            aria-label="Agregar o quitar de favoritos">❤️</button>
+                    <button class="btn-carrito" th:attr="data-id=${producto.id}" 
+                            th:disabled="${producto.stock == 0}" aria-label="Agregar al carrito">
+                        Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="error-container" th:if="${error}">
+            <h1>Error</h1>
+            <p th:text="${error}">Error al cargar el producto</p>
+            <a href="/catalogo" class="btn-volver">Volver al catálogo</a>
+        </div>
+    </main>
+    
+    <script src="/js/producto-detalle.js"></script>
+</body>
+</html> 

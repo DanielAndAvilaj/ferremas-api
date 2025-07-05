@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Servicio para la lógica de negocio de productos y manejo de precios.
+ */
 @Service
 public class ProductoService {
    private final ProductoRepository productoRepository;
@@ -17,40 +20,66 @@ public class ProductoService {
        this.precioRepository = precioRepository;
    }
    
+   /**
+    * Obtiene todos los productos.
+    */
    public List<Producto> obtenerTodos() {
        return productoRepository.findAll();
    }
    
+   /**
+    * Busca un producto por su código.
+    */
    public Producto buscarPorCodigo(String codigo) {
        return productoRepository.findByCodigo(codigo);
    }
    
+   /**
+    * Busca productos por nombre (contiene, ignore case).
+    */
    public List<Producto> buscarPorNombre(String nombre) {
        return productoRepository.findByNombreContainingIgnoreCase(nombre);
    }
    
+   /**
+    * Busca productos por categoría.
+    */
    public List<Producto> buscarPorCategoria(String categoria) {
        return productoRepository.findByCategoria(categoria);
    }
    
+   /**
+    * Busca productos con stock menor a un valor dado.
+    */
    public List<Producto> buscarPorStockMenorA(Integer stock) {
        return productoRepository.findByStockLessThan(stock);
    }
    
+   /**
+    * Guarda un producto (crear o actualizar).
+    */
    public Producto guardarProducto(Producto producto) {
        return productoRepository.save(producto);
    }
    
+   /**
+    * Elimina un producto por ID.
+    */
    public void eliminarProducto(Long id) {
        productoRepository.deleteById(id);
    }
    
+   /**
+    * Obtiene un producto por ID.
+    */
    public Producto obtenerPorId(Long id) {
        return productoRepository.findById(id)
            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
    }
    
-   // MÉTODOS PARA EL ADMIN PANEL CON MANEJO DE PRECIOS
+   /**
+    * Crea un producto y registra su precio si corresponde.
+    */
    public Producto crear(Producto producto) {
        // Obtener precio ANTES de guardar
        Double precio = producto.getPrecio();
@@ -66,6 +95,9 @@ public class ProductoService {
        return productoGuardado;
    }
    
+   /**
+    * Actualiza un producto y registra el cambio de precio si corresponde.
+    */
    public Producto actualizar(Long id, Producto producto) {
        if (!productoRepository.existsById(id)) {
            throw new RuntimeException("Producto no encontrado");
@@ -93,6 +125,9 @@ public class ProductoService {
        return productoActualizado;
    }
    
+   /**
+    * Elimina un producto por ID (con validación).
+    */
    public void eliminar(Long id) {
        if (!productoRepository.existsById(id)) {
            throw new RuntimeException("Producto no encontrado");
@@ -100,17 +135,14 @@ public class ProductoService {
        productoRepository.deleteById(id);
    }
    
-   // MÉTODOS AUXILIARES PARA PRECIOS
+   /**
+    * Crea un registro de precio para un producto.
+    */
    private void crearRegistroPrecio(Producto producto, Double valor) {
        Precio precio = new Precio();
        precio.setProducto(producto);
        precio.setValor(valor);
-       precio.setFecha(LocalDate.now());
+       precio.setFecha(java.time.LocalDateTime.now());
        precioRepository.save(precio);
-   }
-   
-   private Double obtenerPrecioActual(Long productoId) {
-       Producto producto = obtenerPorId(productoId);
-       return producto.getPrecio();
    }
 }

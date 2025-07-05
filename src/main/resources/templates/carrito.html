@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
+<head>
+    <title>Mi Carrito - FERREMAS</title>
+</head>
+<section>
+    <div class="carrito-container">
+        <h1>Mi Carrito</h1>
+        <div id="carritoVacio" class="carrito-vacio" style="display:none;">
+            <p>Tu carrito está vacío.</p>
+            <a href="/catalogo" class="btn">Ir al catálogo</a>
+        </div>
+        <div id="carritoContenido" style="display:none;">
+            <table class="carrito-tabla" aria-label="Tabla de productos en el carrito">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="carritoItems">
+                    <!-- JS render -->
+                </tbody>
+            </table>
+            <div class="carrito-total">
+                <span>Total: $<span id="carritoTotal">0</span></span>
+            </div>
+            <div id="carritoCheckout" style="display: flex; justify-content: flex-end;">
+                <button id="btnIrAPagar" class="btn" style="font-size:1.15rem; padding:0.9rem 2.5rem; border-radius:12px; background:linear-gradient(90deg,#667eea 0%,#764ba2 100%); font-weight:700; box-shadow:0 2px 8px rgba(102,126,234,0.10);">Ir a pagar</button>
+            </div>
+        </div>
+    </div>
+</section>
+<th:block th:fragment="script">
+    <script src="/js/carrito.js"></script>
+</th:block>

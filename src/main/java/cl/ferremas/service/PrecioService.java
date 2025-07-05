@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Servicio para la lógica de negocio de precios.
+ */
 @Service
 public class PrecioService {
 
@@ -15,10 +18,16 @@ public class PrecioService {
         this.precioRepository = precioRepository;
     }
 
+    /**
+     * Obtiene los precios de un producto por su código.
+     */
     public List<Precio> obtenerPreciosPorCodigoProducto(String codigo) {
         return precioRepository.findByProductoCodigo(codigo);
     }
 
+    /**
+     * Guarda un precio.
+     */
     public Precio guardarPrecio(Precio precio) {
         return precioRepository.save(precio);
     }

@@ -1,4 +1,4 @@
-package cl.ferremas.controller;
+package cl.ferremas.controller.api;
 
 import cl.ferremas.model.Usuario;
 import cl.ferremas.service.UsuarioService;

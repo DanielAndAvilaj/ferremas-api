@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - FERREMAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .error-container {
+            max-width: 600px;
+            margin: 2rem;
+            padding: 3rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            color: #e74c3c;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-title {
+            color: #e74c3c;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            color: #555;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .error-actions {
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        }
+        
+        .navbar-simple {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar-simple">
+        <a href="/" class="navbar-logo">🔧 FERREMAS</a>
+    </nav>
+    
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <h1 class="error-title">¡Ups! Algo salió mal</h1>
+        <p class="error-message" th:text="${error ?: 'Ha ocurrido un error inesperado.'}">Ha ocurrido un error inesperado.</p>
+        
+        <div class="error-details" th:if="${error}">
+            <strong>Detalles del error:</strong><br>
+            <span th:text="${error}"></span>
+        </div>
+        
+        <div class="error-actions">
+            <a href="/catalogo" class="btn">Ir al catálogo</a>
+            <a href="/" class="btn btn-secondary">Volver al inicio</a>
+        </div>
+    </div>
+</body>
+</html> 

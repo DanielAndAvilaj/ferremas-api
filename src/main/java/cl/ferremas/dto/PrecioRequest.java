@@ -1,28 +1,28 @@
 package cl.ferremas.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PrecioRequest {
     
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private Double valor;
     private Long productoId;
 
     // Constructores
     public PrecioRequest() {}
 
-    public PrecioRequest(LocalDate fecha, Double valor, Long productoId) {
+    public PrecioRequest(LocalDateTime fecha, Double valor, Long productoId) {
         this.fecha = fecha;
         this.valor = valor;
         this.productoId = productoId;
     }
 
     // Getters y setters
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

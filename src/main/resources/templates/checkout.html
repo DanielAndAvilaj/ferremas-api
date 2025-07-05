@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
+<head>
+    <title>Checkout - FERREMAS</title>
+</head>
+<section>
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+        <div th:if="${#lists.isEmpty(items)}" class="checkout-vacio">
+            <p>No hay productos en tu carrito.</p>
+            <a href="/catalogo" class="btn">Ir al catálogo</a>
+        </div>
+        <div th:if="${!#lists.isEmpty(items)}">
+            <form th:action="@{/checkout}" method="post" class="checkout-form">
+                <table class="checkout-tabla" aria-label="Resumen de compra">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${items}">
+                            <td th:text="${item.producto.nombre}"></td>
+                            <td th:text="'CLP $' + ${item.producto.precio.clp}"></td>
+                            <td th:text="${item.cantidad}"></td>
+                            <td th:text="'CLP $' + ${item.total}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="checkout-total">
+                    <span>Total:</span>
+                    <span th:text="'CLP $' + ${total}"></span>
+                </div>
+                <button type="submit" class="btn">Confirmar compra</button>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="/js/checkout.js"></script> 

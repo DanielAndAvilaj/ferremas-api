@@ -12,69 +12,33 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
             color: #333;
         }
 
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: #667eea;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .nav-link:hover {
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .btn-logout {
-            background: #ff6b6b;
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .btn-logout:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
 
-        /* Main Content */
-        .container {
+        .admin-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .admin-container {
             max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
         .page-header {
@@ -82,132 +46,118 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .page-title {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(76, 175, 80, 0.4);
-        }
-
-        /* Alert Messages */
-        .alert {
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-
-        .alert-error {
-            background: rgba(255, 107, 107, 0.9);
-            color: white;
-            border-left: 4px solid #ff5252;
-        }
-
-        .alert-success {
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
-            border-left: 4px solid #4caf50;
-        }
-
-        /* Search and Filters */
-        .filters {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-
-        .filter-row {
-            display: grid;
-            grid-template-columns: 1fr 200px 200px auto;
+        .header-actions {
+            display: flex;
             gap: 1rem;
-            align-items: center;
         }
 
-        .search-input {
-            padding: 0.75rem 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn-secondary {
-            background: #667eea;
-            color: white;
+        .btn {
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
-            font-weight: 500;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
 
-        .btn-secondary:hover {
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
             background: #5a6fd8;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        /* Products Table */
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
         .products-table {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             overflow: hidden;
         }
 
         .table-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .table-header h3 {
-            color: #333;
-            font-size: 1.5rem;
-            margin: 0;
+        .table-title {
+            font-weight: 600;
+            color: #495057;
         }
 
         .products-count {
-            background: #667eea;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            color: #6c757d;
             font-size: 0.9rem;
-            font-weight: 600;
         }
 
         .table-container {
@@ -217,403 +167,226 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #f0f0f0;
         }
 
         th {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
             font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #495057;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f3f4;
+            vertical-align: middle;
         }
 
         tr:hover {
-            background: rgba(102, 126, 234, 0.05);
-        }
-
-        .product-code {
-            font-family: 'Courier New', monospace;
-            background: rgba(102, 126, 234, 0.1);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            background: #f8f9fa;
         }
 
         .product-name {
             font-weight: 600;
-            color: #333;
-        }
-
-        .product-brand {
-            background: rgba(102, 126, 234, 0.05);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .product-category {
-            background: rgba(255, 193, 7, 0.1);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            color: #f57c00;
-            font-weight: 500;
+            color: #2c3e50;
         }
 
         .stock-badge {
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-align: center;
-            min-width: 60px;
-            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .stock-high {
-            background: rgba(76, 175, 80, 0.2);
-            color: #2e7d32;
+            background: #d4edda;
+            color: #155724;
         }
 
         .stock-medium {
-            background: rgba(255, 193, 7, 0.2);
-            color: #f57c00;
+            background: #fff3cd;
+            color: #856404;
         }
 
         .stock-low {
-            background: rgba(244, 67, 54, 0.2);
-            color: #d32f2f;
+            background: #f8d7da;
+            color: #721c24;
         }
 
         .stock-zero {
-            background: rgba(158, 158, 158, 0.2);
-            color: #616161;
+            background: #f8d7da;
+            color: #721c24;
         }
 
         .price {
-            font-weight: 700;
-            color: #4CAF50;
-            font-size: 1.1rem;
+            font-weight: 600;
+            color: #28a745;
         }
 
-        .price-zero {
-            color: #999;
-            font-style: italic;
-        }
-
-        /* Action Buttons */
         .actions {
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
 
-        .btn-edit {
-            background: #2196F3;
-            color: white;
+        .btn-sm {
             padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 0.8rem;
         }
 
-        .btn-edit:hover {
-            background: #1976D2;
-            transform: translateY(-1px);
-        }
-
-        .btn-delete {
-            background: #f44336;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-delete:hover {
-            background: #d32f2f;
-            transform: translateY(-1px);
-        }
-
-        .no-products {
+        .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
+            padding: 3rem;
+            color: #6c757d;
         }
 
-        .no-products-icon {
-            font-size: 5rem;
+        .empty-state h3 {
             margin-bottom: 1rem;
-            opacity: 0.3;
+            color: #495057;
         }
 
-        /* Debug Section */
-        .debug-section {
-            background: rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        .debug-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin: 0 1rem;
-        }
-
-        .debug-link:hover {
-            color: white;
-            text-decoration: underline;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .header {
+            .admin-container {
                 padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
             }
-
+            
             .page-header {
                 flex-direction: column;
                 gap: 1rem;
-                align-items: flex-start;
+                align-items: stretch;
             }
-
-            .page-title {
-                font-size: 2rem;
+            
+            .header-actions {
+                justify-content: center;
             }
-
-            .filter-row {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+            
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
             }
-
-            th, td {
-                padding: 0.5rem;
-                font-size: 0.85rem;
+            
+            .table-container {
+                font-size: 0.8rem;
             }
-
-            .table-header {
+            
+            .actions {
                 flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">🔧 FERREMAS - ADMIN</div>
-        <div class="nav-links">
-            <a href="/admin" class="nav-link">Dashboard</a>
-            <a href="/admin/productos" class="nav-link">Productos</a>
-            <a href="/logout" class="btn-logout">Cerrar Sesión</a>
-        </div>
+    <div class="admin-header">
+        <h1>📦 Gestión de Productos</h1>
+        <p>Administra el catálogo completo de productos</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
+    <div class="admin-container">
+        <!-- Header de la página -->
         <div class="page-header">
-            <h1 class="page-title">Gestión de Productos</h1>
-            <a href="/admin/productos/nuevo" class="btn-primary">
-                ➕ Nuevo Producto
-            </a>
-        </div>
-
-        <!-- Alert Messages -->
-        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-
-        <!-- Search and Filters -->
-        <div class="filters">
-            <div class="filter-row">
-                <input type="text" id="searchInput" placeholder="Buscar por nombre o marca..." class="search-input">
-                <select id="categoryFilter" class="search-input">
-                    <option value="">Todas las categorías</option>
-                    <option value="HERRAMIENTAS">🔨 Herramientas</option>
-                    <option value="Materiales">🧱 Materiales</option>
-                    <option value="Electricidad">⚡ Electricidad</option>
-                    <option value="PLOMERIA">🚿 Plomería</option>
-                    <option value="Jardinería">🌱 Jardinería</option>
-                    <option value="Seguridad">🦺 Seguridad</option>
-                    <option value="PINTURA">🎨 Pintura</option>
-                    <option value="FERRETERIA">🔩 Ferretería</option>
-                </select>
-                <select id="stockFilter" class="search-input">
-                    <option value="">Todo el stock</option>
-                    <option value="high">Stock alto (>50)</option>
-                    <option value="medium">Stock medio (10-50)</option>
-                    <option value="low">Stock bajo (<10)</option>
-                    <option value="zero">Sin stock (0)</option>
-                </select>
-                <button onclick="clearFilters()" class="btn-secondary">Limpiar</button>
+            <div class="page-title">Productos del Catálogo</div>
+            <div class="header-actions">
+                <a href="/admin" class="btn btn-warning">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+                <a href="/admin/productos/nuevo" class="btn btn-primary">
+                    <span>➕</span>
+                    Nuevo Producto
+                </a>
             </div>
         </div>
 
-        <!-- Products Table -->
+        <!-- Estadísticas -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${totalProductos ?: '0'}">0</div>
+                <div class="stat-label">Total Productos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${productosStockBajo ?: '0'}">0</div>
+                <div class="stat-label">Stock Bajo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${productosSinStock ?: '0'}">0</div>
+                <div class="stat-label">Sin Stock</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${totalSucursales ?: '0'}">0</div>
+                <div class="stat-label">Sucursales</div>
+            </div>
+        </div>
+
+        <!-- Tabla de Productos -->
         <div class="products-table">
             <div class="table-header">
-                <h3>📦 Lista de Productos</h3>
-                <div class="products-count" th:text="'Total: ' + (${productos != null ? productos.size() : 0}) + ' productos'">
-                    Total: 0 productos
-                </div>
+                <div class="table-title">Lista de Productos</div>
+                <div class="products-count" id="productsCount">Mostrando: 0 productos</div>
             </div>
-            
             <div class="table-container">
-                <!-- ✅ ESTRUCTURA SIMPLIFICADA QUE SABEMOS QUE FUNCIONA -->
-                <div th:if="${productos != null and !productos.isEmpty()}">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>📋 Código</th>
-                                <th>📦 Nombre</th>
-                                <th>🏢 Marca</th>
-                                <th>🏷️ Categoría</th>
-                                <th>📊 Stock</th>
-                                <th>💰 Precio</th>
-                                <th>⚙️ Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- ✅ LOOP BÁSICO SIN CLASES COMPLEJAS -->
-                            <tr th:each="producto : ${productos}" class="product-row">
-                                <td>
-                                    <span class="product-code" th:text="${producto.codigo}">-</span>
-                                </td>
-                                <td class="product-name" th:text="${producto.nombre}">-</td>
-                                <td>
-                                    <span class="product-brand" th:text="${producto.marca ?: 'Sin marca'}">-</span>
-                                </td>
-                                <td>
-                                    <span class="product-category" th:text="${producto.categoria}">-</span>
-                                </td>
-                                <td>
-                                    <span class="stock-badge stock-medium" th:text="${producto.stock}" th:data-stock="${producto.stock}">-</span>
-                                </td>
-                                <td>
-                                    <span class="price" th:text="'$' + ${producto.precio}">-</span>
-                                </td>
-                                <td>
-                                    <div class="actions">
-                                        <a th:href="@{/admin/productos/{id}/editar(id=${producto.id})}" class="btn-edit">
-                                            ✏️ Editar
-                                        </a>
-                                        <form th:action="@{/admin/productos/{id}/eliminar(id=${producto.id})}" 
-                                              method="post" 
-                                              style="display: inline;"
-                                              onsubmit="return confirm('¿Eliminar este producto?')">
-                                            <button type="submit" class="btn-delete">🗑️ Eliminar</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- ✅ MENSAJE CUANDO NO HAY PRODUCTOS -->
-                <div th:if="${productos == null or productos.isEmpty()}" class="no-products">
-                    <div class="no-products-icon">📦</div>
-                    <h3>No hay productos registrados</h3>
-                    <p>Comienza agregando tu primer producto</p>
-                    <a href="/admin/productos/nuevo" class="btn-primary" style="margin-top: 1rem;">
-                        ➕ Agregar Primer Producto
-                    </a>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="producto : ${productos}" class="product-row">
+                            <td>
+                                <div class="product-name" th:text="${producto.nombre}">Nombre del producto</div>
+                                <div style="color: #6c757d; font-size: 0.9rem;" th:text="${producto.marca}">Marca</div>
+                            </td>
+                            <td>
+                                <span class="price" th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">$0</span>
+                            </td>
+                            <td>
+                                <span class="stock-badge" 
+                                      th:class="${producto.stock > 50 ? 'stock-high' : (producto.stock >= 10 ? 'stock-medium' : (producto.stock > 0 ? 'stock-low' : 'stock-zero'))}"
+                                      th:text="${producto.stock}"
+                                      th:data-stock="${producto.stock}">0</span>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a th:href="@{'/admin/productos/' + ${producto.id} + '/editar'}" class="btn btn-warning btn-sm">
+                                        <span>✏️</span>
+                                        Editar
+                                    </a>
+                                    <form th:action="@{'/admin/productos/' + ${producto.id} + '/eliminar'}" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?')">
+                                            <span>🗑️</span>
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Debug Section -->
-        <div class="debug-section">
-            <a href="/admin/debug-productos" target="_blank" class="debug-link">🔍 Debug completo</a>
-            <a href="/admin/test-crear-producto" target="_blank" class="debug-link">🧪 Crear producto de prueba</a>
+        <!-- Estado vacío -->
+        <div class="empty-state" th:if="${productos == null or productos.isEmpty()}">
+            <h3>📦 No hay productos registrados</h3>
+            <p>Comienza agregando tu primer producto al catálogo</p>
+            <a href="/admin/productos/nuevo" class="btn btn-primary" style="margin-top: 1rem;">
+                <span>➕</span>
+                Crear Primer Producto
+            </a>
         </div>
     </div>
 
     <script>
-        // ✅ FILTROS SIMPLIFICADOS
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const stockFilter = document.getElementById('stockFilter');
+        // Actualizar contador de productos
         const productRows = document.querySelectorAll('.product-row');
-
-        function filterProducts() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const selectedCategory = categoryFilter.value.toUpperCase();
-            const selectedStock = stockFilter.value;
-
-            productRows.forEach(row => {
-                const name = row.querySelector('.product-name').textContent.toLowerCase();
-                const marca = row.querySelector('.product-brand').textContent.toLowerCase();
-                const category = row.querySelector('.product-category').textContent.toUpperCase();
-                const stockBadge = row.querySelector('.stock-badge');
-                const stock = parseInt(stockBadge.getAttribute('data-stock') || '0');
-
-                let matchesSearch = name.includes(searchTerm) || marca.includes(searchTerm);
-                let matchesCategory = !selectedCategory || category.includes(selectedCategory);
-                let matchesStock = true;
-
-                if (selectedStock === 'high') {
-                    matchesStock = stock > 50;
-                } else if (selectedStock === 'medium') {
-                    matchesStock = stock >= 10 && stock <= 50;
-                } else if (selectedStock === 'low') {
-                    matchesStock = stock > 0 && stock < 10;
-                } else if (selectedStock === 'zero') {
-                    matchesStock = stock === 0;
-                }
-
-                if (matchesSearch && matchesCategory && matchesStock) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Update counter
-            const visibleRows = Array.from(productRows).filter(row => row.style.display !== 'none');
-            const countElement = document.querySelector('.products-count');
-            if (countElement) {
-                countElement.textContent = `Mostrando: ${visibleRows.length} de ${productRows.length} productos`;
-            }
+        const countElement = document.getElementById('productsCount');
+        if (countElement) {
+            countElement.textContent = `Mostrando: ${productRows.length} productos`;
         }
-
-        function clearFilters() {
-            searchInput.value = '';
-            categoryFilter.value = '';
-            stockFilter.value = '';
-            filterProducts();
-        }
-
-        searchInput.addEventListener('input', filterProducts);
-        categoryFilter.addEventListener('change', filterProducts);
-        stockFilter.addEventListener('change', filterProducts);
     </script>
 </body>
-</html>
+</html> 

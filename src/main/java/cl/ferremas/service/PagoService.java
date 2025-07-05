@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Servicio para la lógica de negocio de pagos y transacciones Webpay.
+ */
 @Service
 public class PagoService {
 
@@ -26,12 +29,16 @@ public class PagoService {
                 .build();
     }
 
-    // Inicia la transacción con datos personalizables
+    /**
+     * Inicia una transacción con datos personalizables.
+     */
     public Mono<Map<String, Object>> iniciarTransaccion(Double monto) {
         return iniciarTransaccionCompleta(monto, null, null);
     }
 
-    // Versión completa que permite personalizar más datos
+    /**
+     * Inicia una transacción completa con más datos.
+     */
     public Mono<Map<String, Object>> iniciarTransaccionCompleta(Double monto, String descripcion, String emailCliente) {
         String buyOrder = "FERREMAS-" + System.currentTimeMillis(); // Más descriptivo
         String sessionId = UUID.randomUUID().toString().substring(0, 26);
@@ -67,7 +74,9 @@ public class PagoService {
                 });
     }
 
-    // Confirma la transacción con el token recibido
+    /**
+     * Confirma la transacción con el token recibido.
+     */
     public Mono<Map<String, Object>> confirmarTransaccion(String token) {
         return webClient.put()
                 .uri("/transactions/{token}", token)

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - FERREMAS</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .perfil-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .perfil-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .perfil-avatar {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(102,126,234,0.15);
+        }
+        .avatar-icon {
+            font-size: 3.5rem;
+            color: white;
+        }
+        .perfil-nombre {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+        .perfil-email {
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            word-break: break-all;
+        }
+        .perfil-rol {
+            display: inline-block;
+            background: #e3eafe;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .perfil-acciones {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0.9rem 1.7rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.18);
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+        .btn-logout:hover {
+            box-shadow: 0 8px 24px rgba(220, 53, 69, 0.18);
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.4rem;
+            font-size: 0.97rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 14px;
+            padding: 1.2rem 1rem 1.5rem 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.06);
+            text-align: left;
+        }
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        @media (max-width: 600px) {
+            .perfil-container {
+                padding: 1.5rem 0.5rem;
+            }
+            .perfil-avatar {
+                width: 80px;
+                height: 80px;
+            }
+            .avatar-icon {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="perfil-container">
+        <!-- Mensajes de éxito y error -->
+        <div th:if="${success}" class="alert alert-success">
+            <span>✅</span>
+            <span th:text="${success}">Mensaje de éxito</span>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <span>❌</span>
+            <span th:text="${error}">Mensaje de error</span>
+        </div>
+
+        <div class="perfil-avatar">
+            <span class="avatar-icon">👤</span>
+        </div>
+        <div class="perfil-nombre" th:text="${usuario?.nombre ?: 'Usuario'}">Usuario</div>
+        <div class="perfil-email" th:text="${usuario?.email ?: 'correo@correo.com'}">correo@correo.com</div>
+        <div class="perfil-rol" th:text="${usuario?.rol?.name() ?: 'USER'}">USER</div>
+
+        <!-- Formulario de edición de datos -->
+        <form th:action="@{/perfil}" method="post" class="form-section" autocomplete="off">
+            <div class="form-section-title">Editar datos</div>
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" class="form-input" th:value="${usuario?.nombre}" required>
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" id="email" name="email" class="form-input" th:value="${usuario?.email}" required>
+            </div>
+            <button type="submit" class="btn" style="width:100%;margin-top:0.5rem;">Guardar cambios</button>
+        </form>
+
+        <!-- Formulario de cambio de contraseña -->
+        <form th:action="@{/perfil/cambiar-password}" method="post" class="form-section" autocomplete="off">
+            <div class="form-section-title">Cambiar contraseña</div>
+            <div class="form-group">
+                <label for="passwordActual" class="form-label">Contraseña actual</label>
+                <input type="password" id="passwordActual" name="passwordActual" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="nuevaPassword" class="form-label">Nueva contraseña</label>
+                <input type="password" id="nuevaPassword" name="nuevaPassword" class="form-input" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmarPassword" class="form-label">Confirmar nueva contraseña</label>
+                <input type="password" id="confirmarPassword" name="confirmarPassword" class="form-input" minlength="8" required>
+            </div>
+            <button type="submit" class="btn" style="width:100%;margin-top:0.5rem;">Actualizar contraseña</button>
+        </form>
+
+        <div class="perfil-acciones">
+            <a href="/dashboard" class="btn">Volver al Dashboard</a>
+            <form th:action="@{/logout}" method="post" style="display:inline; margin:0; padding:0;">
+                <button type="submit" class="btn btn-logout">Cerrar Sesión</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

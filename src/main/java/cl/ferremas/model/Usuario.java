@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 public class Usuario implements UserDetails {
@@ -17,6 +18,10 @@ public class Usuario implements UserDetails {
    private String password;
    @Enumerated(EnumType.STRING)
    private Rol rol;
+   @Column(nullable = false)
+   private LocalDateTime fechaRegistro;
+   @Column(nullable = false)
+   private boolean enabled = true;
    
    // Getters y Setters
    public Long getId() {
@@ -59,6 +64,20 @@ public class Usuario implements UserDetails {
        this.rol = rol;
    }
    
+   public LocalDateTime getFechaRegistro() {
+       return fechaRegistro;
+   }
+   public void setFechaRegistro(LocalDateTime fechaRegistro) {
+       this.fechaRegistro = fechaRegistro;
+   }
+   
+   public boolean isEnabled() {
+       return enabled;
+   }
+   public void setEnabled(boolean enabled) {
+       this.enabled = enabled;
+   }
+   
    // Métodos de la interfaz UserDetails
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,10 +93,6 @@ public class Usuario implements UserDetails {
    }
    @Override
    public boolean isCredentialsNonExpired() {
-       return true;
-   }
-   @Override
-   public boolean isEnabled() {
        return true;
    }
 }

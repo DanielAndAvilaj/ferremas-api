@@ -2,7 +2,7 @@ package cl.ferremas.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "precio")
@@ -13,7 +13,7 @@ public class Precio {
     private Long id;
     
     @Column(name = "fecha", nullable = false)
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     
     @Column(name = "valor", nullable = false)
     private Double valor;
@@ -27,7 +27,7 @@ public class Precio {
     // ✅ CONSTRUCTORES
     public Precio() {}
     
-    public Precio(LocalDate fecha, Double valor, Producto producto) {
+    public Precio(LocalDateTime fecha, Double valor, Producto producto) {
         this.fecha = fecha;
         this.valor = valor;
         this.producto = producto;
@@ -42,11 +42,11 @@ public class Precio {
         this.id = id;
     }
     
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
     
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
     

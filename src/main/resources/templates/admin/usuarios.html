@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
+<head>
+    <title>Admin Usuarios - FERREMAS</title>
+    <style>
+        .usuarios-container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+        }
+        .usuarios-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .usuarios-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .usuarios-filtros {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .usuarios-filtros input, .usuarios-filtros select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .usuarios-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        .usuarios-table th, .usuarios-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        .usuarios-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #495057;
+        }
+        .usuarios-table tr {
+            border-bottom: 1px solid #e9ecef;
+        }
+        .usuarios-table tr:last-child {
+            border-bottom: none;
+        }
+        .btn {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-right: 0.5rem;
+            transition: background 0.2s;
+        }
+        .btn-editar {
+            background: #667eea;
+            color: #fff;
+        }
+        .btn-editar:hover {
+            background: #4c51bf;
+        }
+        .btn-eliminar {
+            background: #e53e3e;
+            color: #fff;
+        }
+        .btn-eliminar:hover {
+            background: #c53030;
+        }
+        .pagination {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .pagination button, .pagination span {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: #f1f1f1;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .pagination .active {
+            background: #667eea;
+            color: #fff;
+        }
+        .toast {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            background: #28a745;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            z-index: 9999;
+            display: none;
+        }
+        .toast.error {
+            background: #e53e3e;
+        }
+        @media (max-width: 800px) {
+            .usuarios-container { padding: 1rem; }
+            .usuarios-header { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .usuarios-table th, .usuarios-table td { padding: 0.5rem; }
+        }
+    </style>
+</head>
+<section>
+    <div class="usuarios-container">
+        <div th:if="${error}" class="toast toast-error" style="display:block; margin-bottom:1rem;">
+            <span th:text="${error}"></span>
+        </div>
+        <div class="usuarios-header">
+            <div class="usuarios-title">👤 Gestión de Usuarios</div>
+            <form class="usuarios-filtros" method="get" th:action="@{/admin/usuarios}">
+                <input type="text" name="busqueda" th:value="${busqueda}" placeholder="Buscar por nombre o email..." autocomplete="off" />
+                <select name="rol">
+                    <option th:value="" th:selected="${rol == null}">Todos los roles</option>
+                    <option th:value="ADMIN" th:selected="${rol != null and rol.name() == 'ADMIN'}">Admin</option>
+                    <option th:value="USER" th:selected="${rol != null and rol.name() == 'USER'}">Usuario</option>
+                </select>
+                <button type="submit" class="btn btn-editar">Buscar</button>
+            </form>
+        </div>
+        <div th:if="${success}" class="toast" id="toast-success" th:text="${success}"></div>
+        <div th:if="${error}" class="toast error" id="toast-error" th:text="${error}"></div>
+        <table class="usuarios-table" aria-label="Tabla de usuarios">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="usuario : ${usuariosPage.content}">
+                    <td th:text="${usuario.id}"></td>
+                    <td th:text="${usuario.nombre}"></td>
+                    <td th:text="${usuario.email}"></td>
+                    <td th:text="${usuario.rol.name()}"></td>
+                    <td>
+                        <span th:text="${usuario.enabled ? 'Sí' : 'No'}"
+                              th:classappend="${usuario.enabled} ? 'text-success' : 'text-danger'"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/admin/usuarios/editar/' + ${usuario.id}}" class="btn btn-editar">Editar</a>
+                        <button type="button" class="btn btn-eliminar" th:attr="data-id=${usuario.id},data-nombre=${usuario.nombre}" onclick="confirmarEliminar(this)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pagination" th:if="${usuariosPage.totalPages > 1}">
+            <span th:if="${usuariosPage.number > 0}">
+                <a th:href="@{/admin/usuarios(page=${usuariosPage.number - 1}, size=${usuariosPage.size}, busqueda=${busqueda}, rol=${rol != null ? rol.name() : ''})}">&laquo; Anterior</a>
+            </span>
+            <span th:each="i : ${#numbers.sequence(0, usuariosPage.totalPages - 1)}">
+                <a th:href="@{/admin/usuarios(page=${i}, size=${usuariosPage.size}, busqueda=${busqueda}, rol=${rol != null ? rol.name() : ''})}"
+                   th:class="${usuariosPage.number == i} ? 'active' : ''"
+                   th:text="${i + 1}"></a>
+            </span>
+            <span th:if="${usuariosPage.number < usuariosPage.totalPages - 1}">
+                <a th:href="@{/admin/usuarios(page=${usuariosPage.number + 1}, size=${usuariosPage.size}, busqueda=${busqueda}, rol=${rol != null ? rol.name() : ''})}">Siguiente &raquo;</a>
+            </span>
+        </div>
+    </div>
+    <!-- Modal de confirmación para eliminar -->
+    <div id="modal-eliminar" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:2rem; border-radius:12px; max-width:400px; margin:auto; text-align:center;">
+            <div style="font-size:2.5rem; color:#e53e3e;">&#9888;</div>
+            <h2>¿Eliminar usuario?</h2>
+            <p id="modal-nombre"></p>
+            <form id="form-eliminar" method="post" th:action="">
+                <button type="button" class="btn btn-editar" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn btn-eliminar">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    <th:block th:fragment="script">
+    <script>
+        // Toasts
+        window.onload = function() {
+            const toastSuccess = document.getElementById('toast-success');
+            const toastError = document.getElementById('toast-error');
+            if (toastSuccess) {
+                toastSuccess.style.display = 'block';
+                setTimeout(() => { toastSuccess.style.display = 'none'; }, 3500);
+            }
+            if (toastError) {
+                toastError.style.display = 'block';
+                setTimeout(() => { toastError.style.display = 'none'; }, 3500);
+            }
+        };
+        // Modal eliminar
+        function confirmarEliminar(btn) {
+            const id = btn.getAttribute('data-id');
+            const nombre = btn.getAttribute('data-nombre');
+            document.getElementById('modal-nombre').innerText = `¿Seguro que deseas eliminar a "${nombre}"?`;
+            const form = document.getElementById('form-eliminar');
+            form.setAttribute('action', `/admin/usuarios/eliminar/${id}`);
+            document.getElementById('modal-eliminar').style.display = 'flex';
+        }
+        function cerrarModal() {
+            document.getElementById('modal-eliminar').style.display = 'none';
+        }
+    </script>
+    </th:block>
+</section>
+</html> 

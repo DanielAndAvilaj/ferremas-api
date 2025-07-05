@@ -1,4 +1,4 @@
-package cl.ferremas.controller;
+package cl.ferremas.controller.api;
 
 import cl.ferremas.model.Precio;
 import cl.ferremas.model.Producto;
@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.List;
 import cl.ferremas.dto.PrecioRequest;
 
@@ -61,7 +62,7 @@ public class PrecioController {
             mensaje.append("📋 Detalle de Precios:\n");
             for (int i = 0; i < precios.size(); i++) {
                 Precio precio = precios.get(i);
-                String fechaFormateada = precio.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                String fechaFormateada = precio.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 mensaje.append(String.format("   %d. 📅 %s - 💵 $%s CLP\n", 
                     i + 1, 
                     fechaFormateada, 
@@ -73,7 +74,7 @@ public class PrecioController {
             Precio precioActual = precios.get(0);
             mensaje.append(String.format("\n✨ Precio Vigente: $%s CLP (%s)", 
                 formatoPesos.format(precioActual.getValor()),
-                precioActual.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                precioActual.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
             ));
 
             return ResponseEntity.ok(mensaje.toString());
@@ -97,7 +98,7 @@ public class PrecioController {
             
             Precio precioGuardado = precioService.guardarPrecio(precio);
             
-            String fechaFormateada = precioGuardado.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String fechaFormateada = precioGuardado.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             
             String mensaje = String.format(
                 "✅ Precio Registrado Exitosamente\n" +

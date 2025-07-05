@@ -1,4 +1,4 @@
-package cl.ferremas.controller;
+package cl.ferremas.controller.web;
 
 import cl.ferremas.model.Producto;
 import cl.ferremas.model.Precio;
@@ -13,6 +13,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate; // ✅ CORREGIDO: LocalDate en lugar de LocalDateTime
 import java.util.List;
+import cl.ferremas.service.MensajeService;
+import cl.ferremas.service.StockSucursalService;
+import cl.ferremas.service.UsuarioService;
+import cl.ferremas.model.Mensaje;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import cl.ferremas.model.Usuario;
 
 @Controller
 @RequestMapping("/admin")
@@ -25,23 +37,73 @@ public class AdminController {
    @Autowired
    private PrecioRepository precioRepository;
 
+   @Autowired
+   private MensajeService mensajeService;
+
+   @Autowired
+   private StockSucursalService stockSucursalService;
+
+   @Autowired
+   private UsuarioService usuarioService;
+
    // Dashboard principal del admin
    @GetMapping
    public String adminDashboard(Model model) {
        try {
+           // Obtener usuario autenticado
+           Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+           if (auth != null && auth.getPrincipal() instanceof Usuario) {
+               model.addAttribute("usuario", (Usuario) auth.getPrincipal());
+           }
+           
+           // Estadísticas de productos
            List<Producto> productos = productoService.obtenerTodos();
            model.addAttribute("totalProductos", productos.size());
            
-           long productosStockBajo = productos.stream()
+           // Productos con stock bajo (< 10 unidades)
+           List<Producto> productosStockBajo = productos.stream()
                .filter(p -> p.getStock() != null && p.getStock() < 10)
-               .count();
+               .collect(Collectors.toList());
            model.addAttribute("productosStockBajo", productosStockBajo);
+           model.addAttribute("productosStockBajo", productosStockBajo.size());
            
-           model.addAttribute("productos", productos);
+           // Estadísticas de usuarios
+           long totalUsuarios = usuarioService.contarUsuariosTotal();
+           model.addAttribute("totalUsuarios", totalUsuarios);
+           
+           // Mensajes pendientes
+           long mensajesPendientes = mensajeService.contarPorEstado(Mensaje.EstadoMensaje.PENDIENTE);
+           model.addAttribute("mensajesPendientes", mensajesPendientes);
+           
+           // Mensajes recientes (últimos 5)
+           List<Mensaje> mensajesRecientes = mensajeService.obtenerPorEstado(Mensaje.EstadoMensaje.PENDIENTE)
+               .stream()
+               .limit(5)
+               .collect(Collectors.toList());
+           model.addAttribute("mensajesRecientes", mensajesRecientes);
+           
+           // Productos con stock bajo para mostrar en la sección reciente
+           List<Producto> productosStockBajoLista = productos.stream()
+               .filter(p -> p.getStock() != null && p.getStock() < 10)
+               .limit(5)
+               .collect(Collectors.toList());
+           model.addAttribute("productosStockBajoLista", productosStockBajoLista);
            
            return "admin/dashboard";
+           
        } catch (Exception e) {
+           System.err.println("❌ ERROR en adminDashboard: " + e.getMessage());
+           e.printStackTrace();
            model.addAttribute("error", "Error al cargar el dashboard: " + e.getMessage());
+           
+           // Valores por defecto en caso de error
+           model.addAttribute("totalProductos", 0);
+           model.addAttribute("productosStockBajo", 0);
+           model.addAttribute("totalUsuarios", 0);
+           model.addAttribute("mensajesPendientes", 0);
+           model.addAttribute("productosStockBajoLista", List.of());
+           model.addAttribute("mensajesRecientes", List.of());
+           
            return "admin/dashboard";
        }
    }
@@ -58,7 +120,28 @@ public class AdminController {
            List<Producto> productos = productoService.obtenerTodos();
            System.out.println("🔍 DEBUG: Productos obtenidos: " + (productos != null ? productos.size() : "NULL"));
            
+           // Estadísticas para el dashboard
+           int totalProductos = productos.size();
+           
+           // Productos con stock bajo (< 10 unidades)
+           long productosStockBajo = productos.stream()
+               .filter(p -> p.getStock() != null && p.getStock() < 10 && p.getStock() > 0)
+               .count();
+           
+           // Productos sin stock
+           long productosSinStock = productos.stream()
+               .filter(p -> p.getStock() == null || p.getStock() == 0)
+               .count();
+           
+           // Total de sucursales (simulado por ahora)
+           int totalSucursales = 3; // Centro, Norte, Sur
+           
            model.addAttribute("productos", productos);
+           model.addAttribute("totalProductos", totalProductos);
+           model.addAttribute("productosStockBajo", productosStockBajo);
+           model.addAttribute("productosSinStock", productosSinStock);
+           model.addAttribute("totalSucursales", totalSucursales);
+           
            System.out.println("🔍 DEBUG: Model configurado, retornando vista");
            
            return "admin/productos";
@@ -69,6 +152,10 @@ public class AdminController {
            
            model.addAttribute("error", "Error al cargar productos: " + e.getMessage());
            model.addAttribute("productos", List.of());
+           model.addAttribute("totalProductos", 0);
+           model.addAttribute("productosStockBajo", 0);
+           model.addAttribute("productosSinStock", 0);
+           model.addAttribute("totalSucursales", 0);
            
            return "admin/productos";
        }
@@ -166,10 +253,14 @@ public class AdminController {
            productoActual.setCategoria(producto.getCategoria());
            productoActual.setStock(producto.getStock());
            productoActual.setDescripcion(producto.getDescripcion());
-           productoActual.setPrecio(producto.getPrecio()); // ✅ Actualizar precio también
            
            // Guardar producto actualizado
            Producto productoActualizado = productoService.actualizar(id, productoActual);
+
+           // Si hubo cambio de precio, recargar el producto para refrescar historial y precio actual
+           if (producto.getPrecio() != null && (precioAnterior == null || !producto.getPrecio().equals(precioAnterior))) {
+               productoActualizado = productoService.obtenerPorId(id);
+           }
            
            redirectAttributes.addFlashAttribute("success", 
                "Producto '" + productoActualizado.getNombre() + "' actualizado exitosamente. Precio: $" + producto.getPrecio());
@@ -189,7 +280,7 @@ public class AdminController {
            Precio precio = new Precio();
            precio.setProducto(producto);
            precio.setValor(valor);
-           precio.setFecha(LocalDate.now()); // ✅ CORREGIDO: LocalDate.now()
+           precio.setFecha(java.time.LocalDateTime.now());
            
            Precio precioGuardado = precioRepository.save(precio);
            System.out.println("💾 Precio guardado: ID=" + precioGuardado.getId() + ", Valor=$" + valor);
@@ -276,5 +367,83 @@ public class AdminController {
        } catch (Exception e) {
            return "<h2>❌ Error:</h2><p>" + e.getMessage() + "</p>";
        }
+   }
+
+   // API: Métricas para dashboard admin
+   @GetMapping("/api/dashboard/metricas")
+   @ResponseBody
+   public ResponseEntity<?> metricasDashboard() {
+       Map<String, Object> data = new HashMap<>();
+       data.put("ventasDia", 0); // TODO: implementar en PagoService
+       data.put("ventasSemana", 0); // TODO: implementar en PagoService
+       data.put("ventasMes", 0); // TODO: implementar en PagoService
+       data.put("usuariosHoy", usuarioService.contarUsuariosHoy());
+       data.put("usuariosSemana", usuarioService.contarUsuariosSemana());
+       data.put("usuariosTotal", usuarioService.contarUsuariosTotal());
+       data.put("mensajesPendientes", mensajeService.contarPorEstado(Mensaje.EstadoMensaje.PENDIENTE));
+       data.put("stockBajo", productoService.buscarPorStockMenorA(10).size());
+       return ResponseEntity.ok(data);
+   }
+
+   // API: Mensajes por estado
+   @GetMapping("/api/dashboard/mensajes-por-estado")
+   @ResponseBody
+   public ResponseEntity<?> mensajesPorEstado() {
+       Map<String, Long> data = new HashMap<>();
+       for (Mensaje.EstadoMensaje estado : Mensaje.EstadoMensaje.values()) {
+           data.put(estado.name(), mensajeService.contarPorEstado(estado));
+       }
+       return ResponseEntity.ok(data);
+   }
+
+   // API: Productos por categoría
+   @GetMapping("/api/dashboard/productos-por-categoria")
+   @ResponseBody
+   public ResponseEntity<?> productosPorCategoria() {
+       List<cl.ferremas.model.Producto> productos = productoService.obtenerTodos();
+       Map<String, Long> data = productos.stream().collect(Collectors.groupingBy(cl.ferremas.model.Producto::getCategoria, Collectors.counting()));
+       return ResponseEntity.ok(data);
+   }
+
+   // API: Stock por sucursal
+   @GetMapping("/api/dashboard/stock-por-sucursal")
+   @ResponseBody
+   public ResponseEntity<?> stockPorSucursal() {
+       List<cl.ferremas.model.StockSucursal> stocks = stockSucursalService.obtenerTodos();
+       Map<String, Integer> data = new HashMap<>();
+       for (cl.ferremas.model.StockSucursal ss : stocks) {
+           String nombre = ss.getSucursal() != null ? ss.getSucursal().getNombre() : "Sin Sucursal";
+           data.put(nombre, data.getOrDefault(nombre, 0) + (ss.getStock() != null ? ss.getStock() : 0));
+       }
+       return ResponseEntity.ok(data);
+   }
+
+   // API: Productos con stock crítico
+   @GetMapping("/api/dashboard/stock-critico")
+   @ResponseBody
+   public ResponseEntity<?> productosStockCritico() {
+       List<cl.ferremas.model.Producto> criticos = productoService.buscarPorStockMenorA(5);
+       return ResponseEntity.ok(criticos);
+   }
+
+   // API: Mensajes pendientes
+   @GetMapping("/api/dashboard/mensajes-pendientes")
+   @ResponseBody
+   public ResponseEntity<?> mensajesPendientes() {
+       return ResponseEntity.ok(mensajeService.obtenerPendientes());
+   }
+
+   // API: Órdenes pendientes (placeholder)
+   @GetMapping("/api/dashboard/ordenes-pendientes")
+   @ResponseBody
+   public ResponseEntity<?> ordenesPendientes() {
+       return ResponseEntity.ok(List.of()); // TODO: implementar si existe entidad Orden
+   }
+
+   // API: Productos más vistos (placeholder)
+   @GetMapping("/api/dashboard/productos-mas-vistos")
+   @ResponseBody
+   public ResponseEntity<?> productosMasVistos() {
+       return ResponseEntity.ok(List.of()); // TODO: implementar tracking de vistas
    }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - FERREMAS</title>
+    <title>Dashboard Administrador - FERREMAS</title>
     <style>
         * {
             margin: 0;
@@ -12,140 +12,87 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
             color: #333;
         }
 
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-logout {
-            background: #ff6b6b;
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .btn-logout:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .page-title {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Alert Messages */
-        .alert {
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-
-        .alert-error {
-            background: rgba(255, 107, 107, 0.9);
-            color: white;
-            border-left: 4px solid #ff5252;
-        }
-
-        .alert-success {
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
-            border-left: 4px solid #4caf50;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-        }
-
-        .stat-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
-        .stat-label {
-            color: #666;
+        .admin-header p {
+            opacity: 0.9;
             font-size: 1.1rem;
-            font-weight: 500;
         }
 
-        /* Quick Actions */
-        .quick-actions {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            margin-bottom: 3rem;
         }
 
-        .quick-actions h3 {
-            color: #333;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions h2 {
+            color: #2c3e50;
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
         }
@@ -157,194 +104,258 @@
         }
 
         .action-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            border: none;
-            border-radius: 12px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #495057;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .action-btn .icon {
+            font-size: 1.2rem;
+        }
+
+        .recent-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .recent-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .recent-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .action-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 36px rgba(102, 126, 234, 0.4);
+        .recent-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .action-icon {
-            font-size: 2rem;
+        .recent-item:last-child {
+            border-bottom: none;
         }
 
-        /* Recent Products Table */
-        .recent-products {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        .recent-item .item-info {
+            flex: 1;
         }
 
-        .recent-products h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+        .recent-item .item-title {
+            font-weight: 500;
+            color: #2c3e50;
         }
 
-        .table-container {
-            overflow-x: auto;
+        .recent-item .item-subtitle {
+            font-size: 0.85rem;
+            color: #6c757d;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .recent-item .item-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
         }
 
-        th {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            font-weight: 600;
+        .status-active {
+            background: #d4edda;
+            color: #155724;
         }
 
-        tr:hover {
-            background: rgba(102, 126, 234, 0.05);
+        .status-low {
+            background: #f8d7da;
+            color: #721c24;
         }
 
-        .no-products {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 2rem;
+        .admin-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
         }
 
-        /* Responsive */
+        .admin-nav h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #5a6fd8;
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .header {
+            .admin-container {
                 padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
             }
-
-            .page-title {
-                font-size: 2rem;
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
-
+            
             .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recent-section {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">🔧 FERREMAS - ADMIN</div>
-        <div class="user-info">
-            <span>Administrador</span>
-            <a href="/logout" class="btn-logout">Cerrar Sesión</a>
-        </div>
+    <div class="admin-header">
+        <h1>👨‍💼 Panel de Administración</h1>
+        <p>Bienvenido, <span th:text="${usuario?.nombre ?: 'Administrador'}">Administrador</span> | Gestión completa de FERREMAS</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <h1 class="page-title">Panel de Administración</h1>
-
-        <!-- Alert Messages -->
-        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-
-        <!-- Stats Cards -->
+    <div class="admin-container">
+        <!-- Estadísticas Principales -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">📦</div>
-                <div class="stat-number" th:text="${totalProductos} ?: '0'">0</div>
-                <div class="stat-label">Total Productos</div>
+                <h3>📦 Total Productos</h3>
+                <div class="stat-value" th:text="${totalProductos ?: '0'}">0</div>
+                <div class="stat-description">Productos en catálogo</div>
             </div>
-
+            
             <div class="stat-card">
-                <div class="stat-icon">👥</div>
-                <div class="stat-number">-</div>
-                <div class="stat-label">Usuarios Registrados</div>
+                <h3>👥 Usuarios Registrados</h3>
+                <div class="stat-value" th:text="${totalUsuarios ?: '0'}">0</div>
+                <div class="stat-description">Clientes activos</div>
             </div>
-
+            
             <div class="stat-card">
-                <div class="stat-icon">💰</div>
-                <div class="stat-number">-</div>
-                <div class="stat-label">Ventas del Mes</div>
+                <h3>📧 Mensajes Pendientes</h3>
+                <div class="stat-value" th:text="${mensajesPendientes ?: '0'}">0</div>
+                <div class="stat-description">Requieren atención</div>
             </div>
-
+            
             <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-number">-</div>
-                <div class="stat-label">Órdenes Pendientes</div>
+                <h3>⚠️ Stock Bajo</h3>
+                <div class="stat-value" th:text="${productosStockBajo ?: '0'}">0</div>
+                <div class="stat-description">Productos con stock < 10</div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
+        <!-- Acciones Rápidas -->
         <div class="quick-actions">
-            <h3>Acciones Rápidas</h3>
+            <h2>⚡ Acciones Rápidas</h2>
             <div class="actions-grid">
                 <a href="/admin/productos" class="action-btn">
-                    <span class="action-icon">📦</span>
-                    Gestionar Productos
-                </a>
-                <a href="/admin/productos/nuevo" class="action-btn">
-                    <span class="action-icon">➕</span>
-                    Nuevo Producto
+                    <span class="icon">📦</span>
+                    <span>Gestionar Productos</span>
                 </a>
                 <a href="/admin/usuarios" class="action-btn">
-                    <span class="action-icon">👥</span>
-                    Ver Usuarios
+                    <span class="icon">👥</span>
+                    <span>Gestionar Usuarios</span>
                 </a>
-                <a href="/admin/reportes" class="action-btn">
-                    <span class="action-icon">📊</span>
-                    Reportes
+                <a href="/admin/mensajes" class="action-btn">
+                    <span class="icon">📧</span>
+                    <span>Ver Mensajes</span>
+                </a>
+                <a href="/admin/reportes/ventas" class="action-btn">
+                    <span class="icon">📊</span>
+                    <span>Reportes</span>
+                </a>
+                <a href="/sucursales" class="action-btn">
+                    <span class="icon">🏪</span>
+                    <span>Sucursales</span>
+                </a>
+                <a href="/catalogo" class="action-btn">
+                    <span class="icon">🛍️</span>
+                    <span>Ver Catálogo</span>
                 </a>
             </div>
         </div>
 
-        <!-- Recent Products -->
-        <div class="recent-products">
-            <h3>Productos Recientes</h3>
-            <div class="table-container">
-                <table th:if="${productos != null and !productos.isEmpty()}">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Stock</th>
-                            <th>Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="producto, iterStat : ${productos}" th:if="${iterStat.index < 5}">
-                            <td th:text="${producto.codigo}">COD001</td>
-                            <td th:text="${producto.nombre}">Producto</td>
-                            <td th:text="${producto.categoria}">Categoría</td>
-                            <td th:text="${producto.stock}">0</td>
-                            <td>$<span th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div th:if="${productos == null or productos.isEmpty()}" class="no-products">
-                    No hay productos registrados aún.
+        <!-- Navegación Completa -->
+        <div class="admin-nav">
+            <h2>🧭 Navegación Completa</h2>
+            <div class="nav-links">
+                <a href="/admin/productos" class="nav-link">Productos</a>
+                <a href="/admin/usuarios" class="nav-link">Usuarios</a>
+                <a href="/admin/mensajes" class="nav-link">Mensajes</a>
+                <a href="/admin/reportes/ventas" class="nav-link">Reportes Ventas</a>
+                <a href="/admin/reportes/productos" class="nav-link">Reportes Productos</a>
+                <a href="/sucursales" class="nav-link">Sucursales</a>
+                <a href="/catalogo" class="nav-link">Catálogo</a>
+                <a href="/dashboard" class="nav-link">Dashboard Usuario</a>
+                <a href="/perfil" class="nav-link">Mi Perfil</a>
+            </div>
+        </div>
+
+        <!-- Sección de Actividad Reciente -->
+        <div class="recent-section">
+            <!-- Productos con Stock Bajo -->
+            <div class="recent-card" th:if="${productosStockBajoLista != null and productosStockBajoLista.size() > 0}">
+                <h3>⚠️ Productos con Stock Bajo</h3>
+                <div class="recent-item" th:each="producto : ${productosStockBajoLista}">
+                    <div class="item-info">
+                        <div class="item-title" th:text="${producto.nombre}">Producto</div>
+                        <div class="item-subtitle" th:text="'Stock: ' + ${producto.stock} + ' unidades'">Stock</div>
+                    </div>
+                    <span class="item-status status-low" th:text="${producto.stock}">0</span>
+                </div>
+            </div>
+
+            <!-- Mensajes Recientes -->
+            <div class="recent-card" th:if="${mensajesRecientes != null and mensajesRecientes.size() > 0}">
+                <h3>📧 Mensajes Recientes</h3>
+                <div class="recent-item" th:each="mensaje : ${mensajesRecientes}">
+                    <div class="item-info">
+                        <div class="item-title" th:text="${mensaje.nombreCliente}">Cliente</div>
+                        <div class="item-subtitle" th:text="${mensaje.asunto}">Asunto</div>
+                    </div>
+                    <span class="item-status status-pending" th:text="${mensaje.estado}">PENDIENTE</span>
                 </div>
             </div>
         </div>

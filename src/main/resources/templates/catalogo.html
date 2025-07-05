@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
+<head>
+    <title>Catálogo de Productos - FERREMAS</title>
+</head>
+<section>
+    <div class="catalog-header">
+        <div class="catalog-header-card">
+            <div class="catalog-logo">🛒 FERREMAS</div>
+            <div class="catalog-subtitle">Catálogo Público</div>
+        </div>
+    </div>
+    <div class="catalog-container">
+        <aside class="catalog-sidebar" aria-label="Filtros de productos">
+            <div class="sidebar-title">Filtrar productos</div>
+            <form id="filtrosForm" method="get" action="/catalogo">
+                <div class="sidebar-group">
+                    <label class="sidebar-label" for="categoriaFiltro">Categoría</label>
+                    <select class="sidebar-select" id="categoriaFiltro" name="categoria">
+                        <option value="">Todas</option>
+                        <option th:each="cat : ${categorias}" 
+                                th:value="${cat}" 
+                                th:text="${cat}"
+                                th:selected="${filtros.categoria == cat}">
+                        </option>
+                    </select>
+                </div>
+                <div class="sidebar-group">
+                    <label class="sidebar-label" for="marcaFiltro">Marca</label>
+                    <select class="sidebar-select" id="marcaFiltro" name="marca">
+                        <option value="">Todas</option>
+                        <option th:each="marca : ${marcas}" 
+                                th:value="${marca}" 
+                                th:text="${marca}"
+                                th:selected="${filtros.marca == marca}">
+                        </option>
+                    </select>
+                </div>
+                <div class="sidebar-group">
+                    <label class="sidebar-label" for="sucursalFiltro">Sucursal</label>
+                    <select class="sidebar-select" id="sucursalFiltro" name="sucursal">
+                        <option value="">Todas</option>
+                        <option th:each="suc : ${sucursales}" 
+                                th:value="${suc.id}" 
+                                th:text="${suc.nombre}"
+                                th:selected="${filtros.sucursal == suc.id}">
+                        </option>
+                    </select>
+                </div>
+                <div class="sidebar-group">
+                    <label class="sidebar-label" for="precioMinFiltro">Precio CLP</label>
+                    <input type="number" class="sidebar-input" id="precioMinFiltro" name="precioMin" 
+                           th:value="${filtros.precioMin}" placeholder="Mínimo">
+                    <input type="number" class="sidebar-input" id="precioMaxFiltro" name="precioMax" 
+                           th:value="${filtros.precioMax}" placeholder="Máximo">
+                </div>
+                <div class="sidebar-group">
+                    <label><input type="checkbox" id="stockFiltro" name="stock" 
+                                 th:checked="${filtros.stock}"> Solo productos con stock</label>
+                </div>
+                <button type="submit" class="btn btn-block">Aplicar filtros</button>
+            </form>
+        </aside>
+        <main class="catalog-main">
+            <div class="catalog-search-bar">
+                <input type="text" id="busquedaInput" class="search-input" 
+                       th:value="${filtros.busqueda}" placeholder="Buscar por nombre o descripción..." aria-label="Buscar productos">
+            </div>
+            <div id="catalogoGrid" class="catalog-grid" aria-live="polite">
+                <!-- Productos dinámicos -->
+                <div th:each="producto : ${productos}" class="product-card">
+                    <button class="btn-fav" th:data-id="${producto.id}" 
+                            th:classappend="${producto.favorito ? 'fav-active' : ''}"
+                            title="Agregar/Quitar Favorito" sec:authorize="isAuthenticated()">♥</button>
+                    <a th:href="@{'/catalogo/producto/' + ${producto.id}}" class="product-link" tabindex="0">
+                        <img th:src="@{'/img/productos/' + ${producto.codigo} + '.jpg'}" 
+                             class="product-img" alt="Imagen de producto" 
+                             loading="lazy" onerror="this.src='/img/productos/default.jpg'">
+                        <div class="product-title" th:text="${producto.nombre}"></div>
+                        <div class="product-brand" th:text="${producto.marca}"></div>
+                        <div class="product-category" th:text="${producto.categoria}"></div>
+                        <div class="product-desc" th:text="${producto.descripcion}"></div>
+                        <div class="product-prices">
+                            <span class="price-clp" th:text="'CLP $' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}"></span>
+                            <span class="price-usd" th:text="'USD $' + ${#numbers.formatDecimal(producto.precio / valorDolar, 2, 'POINT', 2, 'COMMA')}"></span>
+                        </div>
+                        <div class="product-stock">
+                            <span th:if="${producto.stock > 0}" class="stock-badge" th:text="'Stock: ' + ${producto.stock}"></span>
+                            <span th:if="${producto.stock == 0}" class="stock-badge stock-zero">Sin stock</span>
+                        </div>
+                    </a>
+                    <button class="btn-carrito-rapido" th:data-id="${producto.id}" 
+                            th:disabled="${producto.stock == 0}" 
+                            title="Agregar al carrito">
+                        🛒
+                    </button>
+                </div>
+                <div th:if="${#lists.isEmpty(productos)}" class="no-results">
+                    <h3>😕 No se encontraron productos con los filtros seleccionados</h3>
+                    <p>Intenta ajustar los filtros o buscar con otros términos.</p>
+                </div>
+            </div>
+            <div class="pagination" th:if="${pages > 1}">
+                <button th:each="pageNum : ${#numbers.sequence(1, pages)}" 
+                        th:class="'pagination-btn' + (${pageNum == page} ? ' active' : '')"
+                        th:onclick="'window.location.href=\'/catalogo?page=' + ${pageNum} + '&' + window.location.search.substring(1) + '\''"
+                        th:text="${pageNum}">
+                </button>
+            </div>
+        </main>
+    </div>
+</section>
+<script src="/js/catalogo.js"></script>

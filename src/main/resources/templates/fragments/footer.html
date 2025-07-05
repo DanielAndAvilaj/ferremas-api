@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+    <footer class="footer-publico" th:fragment="footer" aria-label="Pie de página">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="footer-logo">🔧 <span style="color:#667eea;font-weight:bold;">FERREMAS</span></div>
+                <div class="footer-desc">Tu ferretería de confianza en Chile. Calidad, precio y servicio.</div>
+                <div class="footer-redes">
+                    <a href="#" title="Facebook" class="footer-red" aria-label="Facebook">📘</a>
+                    <a href="#" title="Instagram" class="footer-red" aria-label="Instagram">📸</a>
+                    <a href="#" title="WhatsApp" class="footer-red" aria-label="WhatsApp">💬</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <div class="footer-title">Enlaces útiles</div>
+                <ul class="footer-links">
+                    <li><a href="/catalogo">Catálogo</a></li>
+                    <li><a href="/sucursales">Sucursales</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                    <li><a href="/login">Iniciar sesión</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-title">Sucursales</div>
+                <ul class="footer-sucursales">
+                    <li th:each="suc : ${sucursales}" th:text="'📍 ' + ${suc.nombre}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copy">&copy; 2025 FERREMAS. Todos los derechos reservados.</div>
+    </footer>
+</body>
+</html>
+
+<style>
+.footer-publico {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2.5rem 0 1rem 0;
+    margin-top: 3rem;
+}
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 2.5rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 2rem;
+}
+.footer-col {
+    flex: 1 1 220px;
+    margin-bottom: 1.5rem;
+}
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.7rem;
+}
+.footer-desc {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #e3eafe;
+}
+.footer-redes {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+}
+.footer-red {
+    color: #fff;
+    font-size: 1.3rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.footer-red:hover { color: #ffd700; }
+.footer-title {
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    color: #ffd700;
+}
+.footer-links, .footer-sucursales {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-links li, .footer-sucursales li {
+    margin-bottom: 0.5rem;
+}
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+}
+.footer-links a:hover { text-decoration: underline; }
+.footer-copy {
+    text-align: center;
+    color: #e3eafe;
+    font-size: 0.98rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1rem;
+}
+@media (max-width: 900px) {
+    .footer-container { flex-direction: column; gap: 1.5rem; padding: 0 1rem; }
+    .footer-col { margin-bottom: 1.2rem; }
+}
+</style>

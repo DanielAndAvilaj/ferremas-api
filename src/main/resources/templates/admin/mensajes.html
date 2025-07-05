@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Mensajes - FERREMAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .user-role {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-pendientes { color: #e74c3c; }
+        .stat-proceso { color: #f39c12; }
+        .stat-resueltos { color: #27ae60; }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .tabs-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .tabs-header {
+            display: flex;
+            border-bottom: 2px solid #f1f3f4;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tab-button.active {
+            color: #667eea;
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+        
+        .tab-button:hover {
+            background: #f8f9fa;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .mensajes-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .mensaje-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .mensaje-card:hover {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .mensaje-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .mensaje-info h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mensaje-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .mensaje-estado {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .estado-pendiente {
+            background: #fee;
+            color: #e74c3c;
+        }
+        
+        .estado-proceso {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+        
+        .estado-resuelto {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+        
+        .mensaje-content {
+            margin-bottom: 1rem;
+        }
+        
+        .mensaje-asunto {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mensaje-texto {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .mensaje-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .close {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs-header {
+                flex-direction: column;
+            }
+            
+            .mensaje-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .mensaje-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">🔧 FERREMAS</a>
+            <div class="navbar-user">
+                <div class="user-info">
+                    <div class="user-name" th:text="${usuario.nombre}">Admin</div>
+                    <div class="user-role" th:text="${usuario.rol}">ADMIN</div>
+                </div>
+                <a href="/catalogo" class="btn btn-secondary">← Volver al catálogo</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        <div class="header-section">
+            <h1 class="page-title">📧 Panel de Mensajes</h1>
+        </div>
+        
+        <!-- Alertas -->
+        <div th:if="${param.success}" class="alert alert-success" th:text="${param.success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+        
+        <!-- Estadísticas -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number stat-pendientes" th:text="${totalPendientes}">0</div>
+                <div class="stat-label">Pendientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-proceso" th:text="${totalEnProceso}">0</div>
+                <div class="stat-label">En Proceso</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-resueltos" th:text="${totalResueltos}">0</div>
+                <div class="stat-label">Resueltos</div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-button active" onclick="showTab('pendientes')">
+                    ⏳ Pendientes (<span th:text="${totalPendientes}">0</span>)
+                </button>
+                <button class="tab-button" onclick="showTab('proceso')">
+                    🔄 En Proceso (<span th:text="${totalEnProceso}">0</span>)
+                </button>
+                <button class="tab-button" onclick="showTab('resueltos')">
+                    ✅ Resueltos (<span th:text="${totalResueltos}">0</span>)
+                </button>
+            </div>
+            
+            <!-- Tab Pendientes -->
+            <div id="pendientes" class="tab-content active">
+                <div class="mensajes-grid" th:if="${!mensajesPendientes.empty}">
+                    <div th:each="mensaje : ${mensajesPendientes}" class="mensaje-card">
+                        <div class="mensaje-header">
+                            <div class="mensaje-info">
+                                <h3 th:text="${mensaje.nombreCliente}">Cliente</h3>
+                                <div class="mensaje-meta">
+                                    <span th:text="${mensaje.email}">email@ejemplo.com</span>
+                                    <span th:if="${mensaje.telefono}" th:text="${mensaje.telefono}">+56 9 1234 5678</span>
+                                    <span th:text="${#temporals.format(mensaje.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</span>
+                                </div>
+                            </div>
+                            <div class="mensaje-estado estado-pendiente">PENDIENTE</div>
+                        </div>
+                        
+                        <div class="mensaje-content">
+                            <div class="mensaje-asunto" th:text="${mensaje.asunto}">Asunto del mensaje</div>
+                            <div class="mensaje-texto" th:text="${mensaje.mensaje}">Contenido del mensaje...</div>
+                        </div>
+                        
+                        <div class="mensaje-actions">
+                            <button class="btn btn-primary" onclick="abrirModalResponder(this)" 
+                                    th:data-mensaje-id="${mensaje.id}"
+                                    th:data-cliente="${mensaje.nombreCliente}"
+                                    th:data-asunto="${mensaje.asunto}">
+                                ✉️ Responder
+                            </button>
+                            <button class="btn btn-warning" onclick="cambiarEstado(this, 'EN_PROCESO')"
+                                    th:data-mensaje-id="${mensaje.id}">
+                                🔄 Marcar en Proceso
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${mensajesPendientes.empty}">
+                    <div class="empty-icon">📭</div>
+                    <h3>No hay mensajes pendientes</h3>
+                    <p>¡Excelente! Todos los mensajes han sido atendidos.</p>
+                </div>
+            </div>
+            
+            <!-- Tab En Proceso -->
+            <div id="proceso" class="tab-content">
+                <div class="mensajes-grid" th:if="${!mensajesEnProceso.empty}">
+                    <div th:each="mensaje : ${mensajesEnProceso}" class="mensaje-card">
+                        <div class="mensaje-header">
+                            <div class="mensaje-info">
+                                <h3 th:text="${mensaje.nombreCliente}">Cliente</h3>
+                                <div class="mensaje-meta">
+                                    <span th:text="${mensaje.email}">email@ejemplo.com</span>
+                                    <span th:if="${mensaje.telefono}" th:text="${mensaje.telefono}">+56 9 1234 5678</span>
+                                    <span th:text="${#temporals.format(mensaje.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</span>
+                                </div>
+                            </div>
+                            <div class="mensaje-estado estado-proceso">EN PROCESO</div>
+                        </div>
+                        
+                        <div class="mensaje-content">
+                            <div class="mensaje-asunto" th:text="${mensaje.asunto}">Asunto del mensaje</div>
+                            <div class="mensaje-texto" th:text="${mensaje.mensaje}">Contenido del mensaje...</div>
+                        </div>
+                        
+                        <div class="mensaje-actions">
+                            <button class="btn btn-primary" onclick="abrirModalResponder(this)" 
+                                    th:data-mensaje-id="${mensaje.id}"
+                                    th:data-cliente="${mensaje.nombreCliente}"
+                                    th:data-asunto="${mensaje.asunto}">
+                                ✉️ Responder
+                            </button>
+                            <button class="btn btn-success" onclick="cambiarEstado(this, 'RESUELTO')"
+                                    th:data-mensaje-id="${mensaje.id}">
+                                ✅ Marcar Resuelto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${mensajesEnProceso.empty}">
+                    <div class="empty-icon">⏳</div>
+                    <h3>No hay mensajes en proceso</h3>
+                    <p>No hay mensajes siendo atendidos actualmente.</p>
+                </div>
+            </div>
+            
+            <!-- Tab Resueltos -->
+            <div id="resueltos" class="tab-content">
+                <div class="mensajes-grid" th:if="${!mensajesResueltos.empty}">
+                    <div th:each="mensaje : ${mensajesResueltos}" class="mensaje-card">
+                        <div class="mensaje-header">
+                            <div class="mensaje-info">
+                                <h3 th:text="${mensaje.nombreCliente}">Cliente</h3>
+                                <div class="mensaje-meta">
+                                    <span th:text="${mensaje.email}">email@ejemplo.com</span>
+                                    <span th:if="${mensaje.telefono}" th:text="${mensaje.telefono}">+56 9 1234 5678</span>
+                                    <span th:text="${#temporals.format(mensaje.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</span>
+                                </div>
+                            </div>
+                            <div class="mensaje-estado estado-resuelto">RESUELTO</div>
+                        </div>
+                        
+                        <div class="mensaje-content">
+                            <div class="mensaje-asunto" th:text="${mensaje.asunto}">Asunto del mensaje</div>
+                            <div class="mensaje-texto" th:text="${mensaje.mensaje}">Contenido del mensaje...</div>
+                            
+                            <div th:if="${mensaje.respuestaVendedor}" style="margin-top: 1rem; padding: 1rem; background: #e8f5e8; border-radius: 8px;">
+                                <strong>Respuesta:</strong>
+                                <div th:text="${mensaje.respuestaVendedor}">Respuesta del vendedor...</div>
+                                <small style="color: #666; display: block; margin-top: 0.5rem;">
+                                    Respondido el <span th:text="${#temporals.format(mensaje.fechaRespuesta, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${mensajesResueltos.empty}">
+                    <div class="empty-icon">✅</div>
+                    <h3>No hay mensajes resueltos</h3>
+                    <p>Aún no se han resuelto mensajes.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal para responder -->
+    <div id="modalResponder" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">✉️ Responder Mensaje</h2>
+                <span class="close" onclick="cerrarModal()">&times;</span>
+            </div>
+            
+            <form id="formResponder" method="post">
+                <div class="form-group">
+                    <label class="form-label">Cliente:</label>
+                    <div id="modalCliente" style="padding: 0.5rem; background: #f8f9fa; border-radius: 4px;"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Asunto:</label>
+                    <div id="modalAsunto" style="padding: 0.5rem; background: #f8f9fa; border-radius: 4px;"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="respuesta" class="form-label">Respuesta:</label>
+                    <textarea id="respuesta" name="respuesta" class="form-textarea" 
+                              placeholder="Escribe tu respuesta aquí..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nuevoEstado" class="form-label">Nuevo estado:</label>
+                    <select id="nuevoEstado" name="nuevoEstado" class="form-select" required>
+                        <option value="EN_PROCESO">En Proceso</option>
+                        <option value="RESUELTO">Resuelto</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar Respuesta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Funcionalidad de tabs
+        function showTab(tabName) {
+            // Ocultar todos los tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Mostrar el tab seleccionado
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Funcionalidad del modal
+        function abrirModalResponder(button) {
+            const mensajeId = button.getAttribute('data-mensaje-id');
+            const cliente = button.getAttribute('data-cliente');
+            const asunto = button.getAttribute('data-asunto');
+            
+            document.getElementById('modalCliente').textContent = cliente;
+            document.getElementById('modalAsunto').textContent = asunto;
+            document.getElementById('formResponder').action = `/admin/mensajes/${mensajeId}/responder`;
+            
+            document.getElementById('modalResponder').style.display = 'block';
+        }
+        
+        function cerrarModal() {
+            document.getElementById('modalResponder').style.display = 'none';
+            document.getElementById('respuesta').value = '';
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalResponder');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        }
+        
+        // Cambiar estado de mensaje
+        function cambiarEstado(button, nuevoEstado) {
+            if (confirm('¿Estás seguro de que quieres cambiar el estado de este mensaje?')) {
+                const mensajeId = button.getAttribute('data-mensaje-id');
+                
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/mensajes/${mensajeId}/estado`;
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'nuevoEstado';
+                input.value = nuevoEstado;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html> 

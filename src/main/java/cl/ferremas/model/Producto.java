@@ -52,6 +52,14 @@ public class Producto {
     @JsonManagedReference
     private List<StockSucursal> stocksSucursal = new ArrayList<>();
     
+    // Campo transiente para UI (no se persiste en BD)
+    @Transient
+    private Boolean favorito = false;
+    
+    // Campo transitorio para el precio recibido del formulario
+    @Transient
+    private Double precioFormulario;
+    
     // CONSTRUCTORES
     public Producto() {}
     
@@ -105,19 +113,29 @@ public class Producto {
         this.stocksSucursal = stocksSucursal != null ? stocksSucursal : new ArrayList<>(); 
     }
     
+    public Boolean getFavorito() { return favorito; }
+    public void setFavorito(Boolean favorito) { this.favorito = favorito != null ? favorito : false; }
+    
     // MÉTODOS HELPER PARA PRECIO
     
     /**
-     * Obtiene el precio más reciente del producto
-     * @return el precio actual o 0.0 si no hay precios
+     * Obtiene el precio más reciente del producto o el del formulario si está presente
+     * @return el precio actual, del formulario o 0.0 si no hay precios
      */
     public Double getPrecio() {
+        if (precioFormulario != null) {
+            return precioFormulario;
+        }
         if (precios == null || precios.isEmpty()) {
             return 0.0;
         }
         
-        // Obtener el precio más reciente (último en la lista)
-        return precios.get(precios.size() - 1).getValor();
+        // Obtener el precio más reciente ordenando por fecha
+        return precios.stream()
+                .sorted((p1, p2) -> p2.getFecha().compareTo(p1.getFecha())) // Orden descendente por fecha
+                .findFirst()
+                .map(Precio::getValor)
+                .orElse(0.0);
     }
     
     /**
@@ -130,13 +148,10 @@ public class Producto {
     }
     
     /**
-     * Método helper para establecer precio (usado en formularios)
-     * Este método no modifica directamente los precios, 
-     * debe ser manejado en el controlador
+     * Setter para el precio recibido desde el formulario (no modifica la lista de precios)
      */
     public void setPrecio(Double precio) {
-        // Este método se usa para binding en formularios
-        // El precio real se maneja en el controlador creando un nuevo objeto Precio
+        this.precioFormulario = precio;
     }
     
     // MÉTODOS HELPER ADICIONALES

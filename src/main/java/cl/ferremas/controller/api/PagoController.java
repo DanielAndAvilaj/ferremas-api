@@ -1,4 +1,4 @@
-package cl.ferremas.controller;
+package cl.ferremas.controller.api;
 
 import cl.ferremas.dto.PagoRequest;
 import cl.ferremas.service.PagoService;
@@ -205,7 +205,7 @@ public class PagoController {
         String authorizationCode = (String) response.get("authorization_code");
         String cardNumber = "";
         
-        if (response.containsKey("card_detail") && response.get("card_detail") instanceof Map) {
+        if (response.containsKey("card_detail") && response.get("card_detail") instanceof Map<?, ?>) {
             Map<String, Object> cardDetail = (Map<String, Object>) response.get("card_detail");
             cardNumber = (String) cardDetail.get("card_number");
         }

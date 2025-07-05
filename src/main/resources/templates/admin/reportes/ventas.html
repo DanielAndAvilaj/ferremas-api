@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
+<head>
+    <title>Reporte de Ventas - FERREMAS</title>
+</head>
+<section>
+    <div class="admin-reportes-container">
+        <h1>Reporte de Ventas</h1>
+        <table class="admin-reportes-tabla" aria-label="Tabla de ventas">
+            <thead>
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="venta : ${ventas}">
+                    <td th:text="${venta.id}"></td>
+                    <td th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${venta.usuario.nombre}"></td>
+                    <td th:text="'CLP $' + ${venta.total}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+const labels = /*[[${data.labels}]]*/ [];
+const montos = /*[[${data.montos}]]*/ [];
+new Chart(document.getElementById('ventasChart'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Ventas', data: montos, borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.1)' }] },
+    options: { plugins: { legend: { display: false } } }
+});
+</script> 

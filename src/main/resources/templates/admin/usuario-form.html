@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
+<head>
+    <title>Editar Usuario - FERREMAS</title>
+    <style>
+        .usuario-form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+        }
+        .usuario-form-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        .usuario-form label {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        .usuario-form input, .usuario-form select {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .usuario-form .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+        .btn-guardar {
+            background: #667eea;
+            color: #fff;
+        }
+        .btn-guardar:hover {
+            background: #4c51bf;
+        }
+        .btn-cancelar {
+            background: #e9ecef;
+            color: #333;
+        }
+        .btn-cancelar:hover {
+            background: #cbd5e1;
+        }
+        .toast {
+            background: #e53e3e;
+            color: #fff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .toast.success { background: #28a745; }
+    </style>
+</head>
+<section>
+    <div class="usuario-form-container">
+        <div class="usuario-form-title">Editar Usuario</div>
+        <div th:if="${success}" class="toast success" th:text="${success}"></div>
+        <div th:if="${error}" class="toast" th:text="${error}"></div>
+        <form class="usuario-form" th:action="@{'/admin/usuarios/editar/' + ${usuario.id}}" method="post" th:object="${usuario}">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" th:field="*{nombre}" required />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" required />
+
+            <label for="rol">Rol</label>
+            <select id="rol" th:field="*{rol}" required>
+                <option th:each="r : ${roles}" th:value="${r}" th:text="${r.name()}" th:selected="${usuario.rol == r}"></option>
+            </select>
+
+            <label for="enabled">Estado</label>
+            <select id="enabled" th:field="*{enabled}">
+                <option th:value="true" th:selected="${usuario.enabled}">Activo</option>
+                <option th:value="false" th:selected="${!usuario.enabled}">Desactivado</option>
+            </select>
+
+            <div class="form-actions">
+                <a href="/admin/usuarios" class="btn btn-cancelar">Cancelar</a>
+                <button type="submit" class="btn btn-guardar">Guardar</button>
+            </div>
+        </form>
+    </div>
+</section>
+</html> 

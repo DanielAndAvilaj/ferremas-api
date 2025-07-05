@@ -3,81 +3,631 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferremas - Registro</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Registro - FERREMAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-input.success {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+        
+        .form-input.error {
+            border-color: #dc3545;
+            background: #fff8f8;
+        }
+        
+        .password-requirements {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .requirements-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.4rem;
+            padding: 0.3rem 0;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .requirement.valid {
+            color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
+        }
+        
+        .requirement.invalid {
+            color: #6c757d;
+        }
+        
+        .requirement-icon {
+            font-size: 1rem;
+        }
+        
+        .btn-register {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-register:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .login-link a:hover {
+            color: #5a6fd8;
+            text-decoration: underline;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-icon {
+            font-size: 1.2rem;
+        }
+        
+        .password-toggle {
+            position: relative;
+        }
+        
+        .toggle-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+        
+        .toggle-btn:hover {
+            color: #667eea;
+        }
+        
+        .strength-meter {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .strength-weak { background: #dc3545; width: 25%; }
+        .strength-fair { background: #ffc107; width: 50%; }
+        .strength-good { background: #17a2b8; width: 75%; }
+        .strength-strong { background: #28a745; width: 100%; }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 1.5rem 1rem;
+            }
+            
+            .form-input {
+                padding: 0.8rem;
+            }
+            
+            .btn-register {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
+    <div class="register-container">
+        <div class="logo-section">
             <div class="logo">🔧 FERREMAS</div>
-            <h2>Crear Cuenta</h2>
-            
-            <!-- Mostrar errores si los hay -->
-            <div th:if="${error}" class="alert alert-danger">
-                <span th:text="${error}">Error message</span>
+            <div class="logo-subtitle">Tu ferretería de confianza</div>
+        </div>
+        
+        <h1 class="form-title">Crear Cuenta</h1>
+        
+        <!-- Alertas de error -->
+        <div th:if="${error}" class="alert alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <span th:text="${error}">Error message</span>
+        </div>
+        
+        <div th:if="${nombre}" class="alert alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <span th:text="${nombre}">Error en nombre</span>
+        </div>
+        <div th:if="${email}" class="alert alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <span th:text="${email}">Error en email</span>
+        </div>
+        <div th:if="${password}" class="alert alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <span th:text="${password}">Error en contraseña</span>
+        </div>
+        <div th:if="${confirmPassword}" class="alert alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <span th:text="${confirmPassword}">Error en confirmación</span>
+        </div>
+        
+        <form th:action="@{/register}" method="post" id="registerForm">
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre Completo</label>
+                <input type="text" 
+                       id="nombre" 
+                       name="nombre" 
+                       class="form-input" 
+                       placeholder="Ingresa tu nombre completo"
+                       required>
             </div>
             
-            <form th:action="@{/register}" method="post">
-                <div class="form-group">
-                    <label for="nombre">Nombre Completo:</label>
-                    <input type="text" 
-                           id="nombre" 
-                           name="nombre" 
-                           class="form-control" 
-                           placeholder="Ingresa tu nombre completo"
-                           required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           class="form-control" 
-                           placeholder="ejemplo@correo.com"
-                           required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
+            <div class="form-group">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" 
+                       id="email" 
+                       name="email" 
+                       class="form-input" 
+                       placeholder="ejemplo@correo.com"
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="password-toggle">
                     <input type="password" 
                            id="password" 
                            name="password" 
-                           class="form-control" 
-                           placeholder="Mínimo 6 caracteres"
-                           minlength="6"
+                           class="form-input" 
+                           placeholder="Mínimo 8 caracteres"
+                           minlength="8"
                            required>
+                    <button type="button" class="toggle-btn" onclick="togglePassword('password')">👁️</button>
                 </div>
                 
-                <div class="form-group">
-                    <label for="confirmPassword">Confirmar Contraseña:</label>
+                <div class="strength-meter">
+                    <div class="strength-fill" id="strengthFill"></div>
+                </div>
+                
+                <div class="password-requirements">
+                    <div class="requirements-title">Requisitos de seguridad:</div>
+                    <div class="requirement" id="req-length">
+                        <span class="requirement-icon">📏</span>
+                        <span>Al menos 8 caracteres</span>
+                    </div>
+                    <div class="requirement" id="req-uppercase">
+                        <span class="requirement-icon">🔠</span>
+                        <span>Al menos una mayúscula</span>
+                    </div>
+                    <div class="requirement" id="req-lowercase">
+                        <span class="requirement-icon">🔡</span>
+                        <span>Al menos una minúscula</span>
+                    </div>
+                    <div class="requirement" id="req-number">
+                        <span class="requirement-icon">🔢</span>
+                        <span>Al menos un número</span>
+                    </div>
+                    <div class="requirement" id="req-special">
+                        <span class="requirement-icon">🔣</span>
+                        <span>Al menos un carácter especial (@#$%^&+=!)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                <div class="password-toggle">
                     <input type="password" 
                            id="confirmPassword" 
                            name="confirmPassword" 
-                           class="form-control" 
+                           class="form-input" 
                            placeholder="Repite tu contraseña"
-                           minlength="6"
                            required>
+                    <button type="button" class="toggle-btn" onclick="togglePassword('confirmPassword')">👁️</button>
                 </div>
-                
-                <button type="submit" class="btn">Crear Cuenta</button>
-            </form>
-            
-            <div style="margin-top: 20px;">
-                <a th:href="@{/login}" class="link">¿Ya tienes cuenta? Inicia sesión aquí</a>
             </div>
+            
+            <button type="submit" class="btn-register" id="btnRegister">
+                ✨ Crear Cuenta
+            </button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Creando tu cuenta...</p>
+        </div>
+        
+        <div class="login-link">
+            <a th:href="@{/login}">¿Ya tienes cuenta? Inicia sesión aquí</a>
         </div>
     </div>
     
     <script>
-        // Validar que las contraseñas coincidan
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registerForm');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const email = document.getElementById('email');
+            const btnRegister = document.getElementById('btnRegister');
+            const loading = document.getElementById('loading');
             
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                alert('Las contraseñas no coinciden');
+            // Función para alternar visibilidad de contraseña
+            window.togglePassword = function(fieldId) {
+                const field = document.getElementById(fieldId);
+                const btn = field.nextElementSibling;
+                
+                if (field.type === 'password') {
+                    field.type = 'text';
+                    btn.textContent = '🙈';
+                } else {
+                    field.type = 'password';
+                    btn.textContent = '👁️';
+                }
+            };
+            
+            // Validación de contraseña en tiempo real
+            password.addEventListener('input', function() {
+                const value = this.value;
+                validatePassword(value);
+                updateStrengthMeter(value);
+            });
+            
+            // Validar confirmación de contraseña
+            confirmPassword.addEventListener('input', function() {
+                if (this.value === password.value && this.value !== '') {
+                    this.classList.add('success');
+                    this.classList.remove('error');
+                } else {
+                    this.classList.add('error');
+                    this.classList.remove('success');
+                }
+            });
+            
+            // Validar email
+            email.addEventListener('input', function() {
+                const emailRegex = /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+                if (emailRegex.test(this.value)) {
+                    this.classList.add('success');
+                    this.classList.remove('error');
+                } else {
+                    this.classList.add('error');
+                    this.classList.remove('success');
+                }
+            });
+            
+            // Validación del formulario
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                // Validar nombre
+                const nombre = document.getElementById('nombre').value.trim();
+                if (nombre.length < 2) {
+                    showError('El nombre debe tener al menos 2 caracteres');
+                    isValid = false;
+                }
+                
+                // Validar email
+                const emailRegex = /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+                if (!emailRegex.test(email.value)) {
+                    showError('El formato del email no es válido');
+                    isValid = false;
+                }
+                
+                // Validar contraseña
+                if (!isPasswordValid(password.value)) {
+                    showError('La contraseña no cumple con los requisitos de seguridad');
+                    isValid = false;
+                }
+                
+                // Validar confirmación
+                if (password.value !== confirmPassword.value) {
+                    showError('Las contraseñas no coinciden');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                } else {
+                    // Mostrar loading
+                    btnRegister.style.display = 'none';
+                    loading.style.display = 'block';
+                }
+            });
+            
+            function validatePassword(password) {
+                // Validar longitud
+                const reqLength = document.getElementById('req-length');
+                if (password.length >= 8) {
+                    reqLength.classList.add('valid');
+                    reqLength.classList.remove('invalid');
+                } else {
+                    reqLength.classList.add('invalid');
+                    reqLength.classList.remove('valid');
+                }
+                
+                // Validar mayúscula
+                const reqUppercase = document.getElementById('req-uppercase');
+                if (/[A-Z]/.test(password)) {
+                    reqUppercase.classList.add('valid');
+                    reqUppercase.classList.remove('invalid');
+                } else {
+                    reqUppercase.classList.add('invalid');
+                    reqUppercase.classList.remove('valid');
+                }
+                
+                // Validar minúscula
+                const reqLowercase = document.getElementById('req-lowercase');
+                if (/[a-z]/.test(password)) {
+                    reqLowercase.classList.add('valid');
+                    reqLowercase.classList.remove('invalid');
+                } else {
+                    reqLowercase.classList.add('invalid');
+                    reqLowercase.classList.remove('valid');
+                }
+                
+                // Validar número
+                const reqNumber = document.getElementById('req-number');
+                if (/[0-9]/.test(password)) {
+                    reqNumber.classList.add('valid');
+                    reqNumber.classList.remove('invalid');
+                } else {
+                    reqNumber.classList.add('invalid');
+                    reqNumber.classList.remove('valid');
+                }
+                
+                // Validar carácter especial
+                const reqSpecial = document.getElementById('req-special');
+                if (/[@#$%^&+=!]/.test(password)) {
+                    reqSpecial.classList.add('valid');
+                    reqSpecial.classList.remove('invalid');
+                } else {
+                    reqSpecial.classList.add('invalid');
+                    reqSpecial.classList.remove('valid');
+                }
+                
+                // Actualizar estilo del campo
+                if (isPasswordValid(password)) {
+                    password.classList.add('success');
+                    password.classList.remove('error');
+                } else {
+                    password.classList.add('error');
+                    password.classList.remove('success');
+                }
+            }
+            
+            function updateStrengthMeter(password) {
+                const strengthFill = document.getElementById('strengthFill');
+                let strength = 0;
+                
+                if (password.length >= 8) strength += 25;
+                if (/[A-Z]/.test(password)) strength += 25;
+                if (/[a-z]/.test(password)) strength += 25;
+                if (/[0-9]/.test(password)) strength += 25;
+                if (/[@#$%^&+=!]/.test(password)) strength += 25;
+                
+                strengthFill.className = 'strength-fill';
+                
+                if (strength <= 25) {
+                    strengthFill.classList.add('strength-weak');
+                } else if (strength <= 50) {
+                    strengthFill.classList.add('strength-fair');
+                } else if (strength <= 75) {
+                    strengthFill.classList.add('strength-good');
+                } else {
+                    strengthFill.classList.add('strength-strong');
+                }
+            }
+            
+            function isPasswordValid(password) {
+                return password.length >= 8 && 
+                       /[A-Z]/.test(password) && 
+                       /[a-z]/.test(password) && 
+                       /[0-9]/.test(password) && 
+                       /[@#$%^&+=!]/.test(password);
+            }
+            
+            function showError(message) {
+                // Crear alerta de error
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-danger';
+                alert.innerHTML = `<span class="alert-icon">⚠️</span><span>${message}</span>`;
+                
+                // Insertar al inicio del formulario
+                form.insertBefore(alert, form.firstChild);
+                
+                // Remover después de 5 segundos
+                setTimeout(() => {
+                    alert.remove();
+                }, 5000);
             }
         });
     </script>

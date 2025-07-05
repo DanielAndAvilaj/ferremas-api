@@ -1,122 +1,72 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      th:replace="~{fragments/layout.html :: layout(~{::title}, ~{::head}, ~{::section}, ~{::script})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferremas - Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        .dashboard-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        
-        .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .user-info {
-            margin-bottom: 30px;
-        }
-        
-        .role-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-            margin: 10px;
-        }
-        
-        .role-admin {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        .role-user {
-            background-color: #007bff;
-            color: white;
-        }
-        
-        .btn-logout {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            margin-top: 20px;
-        }
-        
-        .btn-api {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            margin: 10px;
-            display: inline-block;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            border-radius: 8px;
-        }
-    </style>
+    <title>Dashboard - Ferremas</title>
 </head>
-<body>
+<section>
     <div class="dashboard-container">
-        <div class="dashboard-card">
-            <div class="logo">🔧 FERREMAS</div>
-            <h1>¡Bienvenido al Dashboard!</h1>
-            
+        <h1 class="page-title">🏠 Dashboard</h1>
+        <div class="dashboard-card welcome-section">
             <div class="user-info">
-                <h3>Hola, <span th:text="${usuario.nombre}">Usuario</span>!</h3>
-                <p>Email: <span th:text="${usuario.email}">email@ejemplo.com</span></p>
-                
-                <div class="role-badge" 
-                     th:classappend="${usuario.rol == 'ADMIN'} ? 'role-admin' : 'role-user'">
-                    <span th:text="${usuario.rol}">ROL</span>
+                <div class="user-name">¡Hola, <span th:text="${usuario?.nombre ?: 'Usuario Test'}">Usuario Test</span>!</div>
+                <div class="user-email" th:text="${usuario?.email ?: 'test@test.com'}">test@test.com</div>
+                <div class="role-badge" th:classappend="${usuario?.rol?.name() == 'ADMIN'} ? 'role-admin' : 'role-user'">
+                    <span th:text="${usuario?.rol?.name() ?: 'USER'}">USER</span>
                 </div>
             </div>
-            
-            <div>
-                <h4>Acciones disponibles:</h4>
-                
-                <!-- Opciones para ADMIN -->
-                <div th:if="${usuario.rol == 'ADMIN'}">
-                    <a href="/api/productos" class="btn-api" target="_blank">
-                        📦 Gestionar Productos (API)
-                    </a>
-                    <a href="/api/usuarios" class="btn-api" target="_blank">
-                        👥 Gestionar Usuarios (API)
-                    </a>
-                    <a href="/api/pagos" class="btn-api" target="_blank">
-                        💳 Historial de Pagos (API)
-                    </a>
+            <div class="actions-grid">
+                <div th:if="${usuario?.rol?.name() == 'ADMIN'}" class="action-card">
+                    <div class="action-icon">⚙️</div>
+                    <div class="action-title">Panel de Administración</div>
+                    <div class="action-desc">Gestiona productos, usuarios y configuraciones</div>
+                    <a href="/admin" class="btn-action">Ir al Admin</a>
                 </div>
-                
-                <!-- Opciones para USER -->
-                <div th:if="${usuario.rol == 'USER'}">
-                    <a href="/api/productos" class="btn-api" target="_blank">
-                        📦 Ver Productos (API)
-                    </a>
-                    <a href="/api/divisa/convertir-precio?precio=25990&nombreProducto=Martillo" class="btn-api" target="_blank">
-                        💱 Convertir Precios (API)
-                    </a>
+                <div th:if="${usuario?.rol?.name() == 'ADMIN'}" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <div class="action-title">API Endpoints</div>
+                    <div class="action-desc">Acceso completo a todos los endpoints de la API</div>
+                    <a href="/api/productos" class="btn-action" target="_blank">Ver API</a>
                 </div>
-                
-                <br><br>
-                
-                <form th:action="@{/logout}" method="post" style="display: inline;">
-                    <button type="submit" class="btn btn-logout">
-                        🚪 Cerrar Sesión
-                    </button>
-                </form>
+                <div th:if="${usuario?.rol?.name() == 'USER'}" class="action-card">
+                    <div class="action-icon">❤️</div>
+                    <div class="action-title">Mis Favoritos</div>
+                    <div class="action-desc">Productos que has marcado como favoritos</div>
+                    <a href="/mis-favoritos" class="btn-action">Ver Favoritos</a>
+                </div>
+                <div th:if="${usuario?.rol?.name() == 'USER'}" class="action-card">
+                    <div class="action-icon">🛒</div>
+                    <div class="action-title">Mi Carrito</div>
+                    <div class="action-desc">Revisa los productos en tu carrito de compras</div>
+                    <a href="/carrito" class="btn-action">Ver Carrito</a>
+                </div>
             </div>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn-action btn-logout">🚪 Cerrar Sesión</button>
+            </form>
         </div>
-        
         <div class="dashboard-card">
-            <h4>💡 Información del Sistema</h4>
-            <p>Tu API REST está funcionando correctamente.</p>
-            <p>Los enlaces de arriba te llevan directamente a los endpoints de tu API.</p>
-            <p>Estado del sistema: <span style="color: green; font-weight: bold;">✅ ACTIVO</span></p>
+            <div class="system-info">
+                <h4>💡 Información del Sistema</h4>
+                <p>Tu API REST de Ferremas está funcionando correctamente.</p>
+                <p>Puedes acceder a todas las funcionalidades según tu rol de usuario.</p>
+                <p>Los enlaces de arriba te llevan directamente a las diferentes secciones del sistema.</p>
+                <div class="status-badge">
+                    <span>✅</span>
+                    <span>Sistema ACTIVO</span>
+                </div>
+            </div>
         </div>
     </div>
+</section>
+
+<script>
+    function toggleNavbar() {
+        const menu = document.querySelector('.navbar-menu');
+        if (menu) {
+            menu.style.display = (menu.style.display === 'flex' || menu.style.display === '') ? 'none' : 'flex';
+        }
+    }
+</script>
 </body>
 </html>

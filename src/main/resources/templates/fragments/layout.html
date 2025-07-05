@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="~{::title}">FERREMAS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <th:block th:replace="~{::head}"></th:block>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="main-content">
+        <th:block th:replace="~{::section}"></th:block>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{::script}"></th:block>
+</body>
+</html>
+
+<!-- Fragmento layout para uso profesional -->
+<th:block th:fragment="layout(title, head, section, script)">
+    <!DOCTYPE html>
+    <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title th:replace="${title}">FERREMAS</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <th:block th:replace="${head}"></th:block>
+    </head>
+    <body>
+        <div th:if="${mostrarNavbar == null or mostrarNavbar}" th:replace="~{fragments/navbar.html :: navbar}"></div>
+        <main class="main-content">
+            <th:block th:replace="${section}"></th:block>
+        </main>
+        <div th:if="${mostrarFooter == null or mostrarFooter}" th:replace="~{fragments/footer.html :: footer}"></div>
+        <th:block th:if="${script != null}" th:replace="${script}"></th:block>
+    </body>
+    </html>
+</th:block> 

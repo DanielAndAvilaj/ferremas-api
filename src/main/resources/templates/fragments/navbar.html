@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head></head>
+<body>
+    <nav class="navbar-publico" th:fragment="navbar" aria-label="Navegación principal">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo" aria-label="Inicio Ferremas">🔧 <span style="color:#667eea;font-weight:bold;">FERREMAS</span></a>
+            <ul class="navbar-menu">
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/catalogo">Catálogo</a></li>
+                <li><a href="/sucursales">Sucursales</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+            </ul>
+            <form class="navbar-search" action="/catalogo" method="get" role="search">
+                <input type="text" name="q" th:value="${filtros != null ? filtros.busqueda : ''}" placeholder="Buscar productos..." class="navbar-search-input" aria-label="Buscar productos">
+                <button type="submit" class="navbar-search-btn" aria-label="Buscar">🔍</button>
+            </form>
+            <div class="navbar-actions">
+                <a href="/carrito" class="navbar-cart" aria-label="Ver carrito">
+                    🛒 <span id="carritoContador" class="navbar-cart-badge">0</span>
+                </a>
+                <span sec:authorize="isAuthenticated()">
+                    <a href="/perfil" class="navbar-user" aria-label="Perfil de usuario">👤 <span sec:authentication="name"></span></a>
+                    <form th:action="@{/logout}" method="post" style="display:inline; margin:0; padding:0;">
+                        <button type="submit" class="navbar-logout logout-btn" aria-label="Cerrar sesión" style="background:none; border:none; color:#e74c3c; font-weight:500; font-size:1rem; cursor:pointer; padding:0.5rem 1rem; border-radius:8px; transition:background 0.2s;">Salir</button>
+                    </form>
+                </span>
+                <span sec:authorize="!isAuthenticated()">
+                    <a href="/login" class="navbar-login" aria-label="Iniciar sesión">Iniciar sesión</a>
+                    <a href="/register" class="navbar-register" aria-label="Registrarse">Registrarse</a>
+                </span>
+            </div>
+            <button class="navbar-toggle" onclick="toggleNavbar()" aria-label="Abrir menú">☰</button>
+        </div>
+    </nav>
+</body>
+</html>
+
+<style>
+.navbar-publico {
+    background: rgba(255,255,255,0.97);
+    box-shadow: 0 2px 20px rgba(102,126,234,0.07);
+    padding: 0.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0 2rem;
+    flex-wrap: wrap;
+}
+.navbar-logo {
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #667eea;
+    margin-right: 1.5rem;
+}
+.navbar-menu {
+    display: flex;
+    gap: 1.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.navbar-menu li a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.navbar-menu li a:hover {
+    background: #e3eafe;
+}
+.navbar-search {
+    display: flex;
+    align-items: center;
+    background: #f3f6fd;
+    border-radius: 8px;
+    padding: 0.2rem 0.5rem;
+    margin-right: 1rem;
+}
+.navbar-search-input {
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0.7rem;
+    font-size: 1rem;
+    outline: none;
+    width: 140px;
+}
+.navbar-search-btn {
+    background: none;
+    border: none;
+    color: #667eea;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.navbar-cart {
+    position: relative;
+    color: #667eea;
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+.navbar-cart-badge {
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.6rem;
+    position: absolute;
+    top: -10px;
+    right: -16px;
+    font-weight: 700;
+}
+/* Estilos para usuario autenticado */
+.user-menu {
+    position: relative;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.user-info:hover {
+    background: #e3eafe;
+}
+.user-name {
+    color: #667eea;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(102,126,234,0.15);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    margin-top: 0.5rem;
+}
+.user-info:hover .user-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.dropdown-item {
+    display: block;
+    padding: 0.8rem 1.2rem;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.dropdown-item:hover {
+    background: #f3f6fd;
+}
+.dropdown-divider {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 0.5rem 0;
+}
+.logout-btn {
+    color: #e74c3c !important;
+}
+.logout-btn:hover {
+    background: #fdf2f2 !important;
+}
+
+/* Estilos para usuario no autenticado */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.navbar-login, .navbar-register {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.navbar-login:hover, .navbar-register:hover {
+    background: #e3eafe;
+    text-decoration: none;
+}
+.navbar-register {
+    background: #667eea;
+    color: white;
+}
+.navbar-register:hover {
+    background: #5a6fd8;
+    color: white;
+}
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #667eea;
+    cursor: pointer;
+}
+@media (max-width: 900px) {
+    .navbar-container { 
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 0.5rem; 
+        padding: 0 0.5rem; 
+    }
+    .navbar-menu { 
+        flex-direction: column; 
+        gap: 0.5rem; 
+    }
+    .navbar-search { 
+        margin: 0.5rem 0; 
+    }
+    .navbar-actions { 
+        gap: 0.5rem; 
+        justify-content: center;
+    }
+    .navbar-toggle { 
+        display: block; 
+        position: absolute; 
+        top: 10px; 
+        right: 20px; 
+    }
+    .user-dropdown {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: 1px solid #e0e0e0;
+        margin-top: 0.5rem;
+    }
+    .auth-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .navbar-login, .navbar-register {
+        text-align: center;
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+function toggleNavbar() {
+    const menu = document.querySelector('.navbar-menu');
+    const actions = document.querySelector('.navbar-actions');
+    const isVisible = menu.style.display === 'flex' || menu.style.display === '';
+    
+    if (isVisible) {
+        menu.style.display = 'none';
+        actions.style.display = 'none';
+    } else {
+        menu.style.display = 'flex';
+        actions.style.display = 'flex';
+    }
+}
+
+// Cerrar dropdown al hacer clic fuera
+document.addEventListener('click', function(event) {
+    const userMenu = document.querySelector('.user-menu');
+    if (userMenu && !userMenu.contains(event.target)) {
+        const dropdown = userMenu.querySelector('.user-dropdown');
+        if (dropdown) {
+            dropdown.style.opacity = '0';
+            dropdown.style.visibility = 'hidden';
+        }
+    }
+});
+</script>

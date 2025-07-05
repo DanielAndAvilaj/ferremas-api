@@ -284,3 +284,52 @@ Desarrollado para la Evaluación Parcial 2 de la asignatura **ASY5131 Integraci�
 ---
 
 ⭐ **¡No olvides dar una estrella si este proyecto te fue útil!** ⭐
+
+## Arquitectura y Organización del Proyecto
+
+### Estructura de Carpetas
+
+- `src/main/java/cl/ferremas/controller/web/` — Controladores de vistas (Thymeleaf)
+- `src/main/java/cl/ferremas/controller/api/` — Controladores API REST
+- `src/main/java/cl/ferremas/service/` — Servicios de negocio (SOLID, inyección por constructor)
+- `src/main/java/cl/ferremas/model/` — Entidades JPA
+- `src/main/java/cl/ferremas/repository/` — Repositorios Spring Data
+- `src/main/resources/templates/` — Vistas Thymeleaf (todas usan layout y fragmentos)
+- `src/main/resources/static/` — Archivos estáticos (CSS, JS, imágenes)
+
+### Principios y Buenas Prácticas
+- Controladores delgados, lógica en servicios.
+- Inyección de dependencias por constructor.
+- Código limpio, documentado y profesional.
+- Modularización de JS y CSS.
+- Layout y fragmentos centralizados en frontend.
+
+## Seguridad y Roles
+
+### Rutas públicas (no requieren login)
+- `/`, `/login`, `/register`, `/catalogo`, `/catalogo/**`, `/sucursales`, `/contacto`, `/css/**`, `/js/**`, `/img/**`, `/static/**`
+- `/test/**`, `/test-simple` (solo para pruebas)
+- `/api/auth/**`, `/api/usuarios/registrar` (registro y login API)
+
+### Rutas protegidas (requieren login)
+- `/dashboard`, `/carrito`, `/mis-favoritos`, `/checkout` — **USER y ADMIN**
+- `/admin/**` — **Solo ADMIN**
+- `/api/productos/**`, `/api/precios/**` (GET) — **USER y ADMIN**
+- `/api/productos/**`, `/api/precios/**` (POST/PUT/DELETE) — **Solo ADMIN**
+
+### Buenas prácticas de seguridad
+- CSRF desactivado solo para `/api/**` (REST).
+- Gestión de sesión segura, logout y expiración.
+- Manejo de errores y redirecciones amigable para usuarios y APIs.
+- No exponer información sensible en mensajes de error.
+
+## Onboarding rápido para desarrolladores
+
+1. Clona el repositorio y revisa la estructura de carpetas.
+2. Todas las vistas usan el layout base y fragmentos (`fragments/layout.html`).
+3. El JS y CSS está modularizado en `/static/js/` y `/static/css/`.
+4. Los controladores web y API están separados y siguen buenas prácticas.
+5. Los servicios aplican SOLID y están documentados.
+6. Consulta la sección de seguridad para saber qué rutas requieren autenticación y/o roles.
+
+---
