@@ -1,335 +1,418 @@
-# ⚡ Ferremás API
+# 🏪 Ferremas - Sistema de Gestión Ferretera
 
-> **API REST para gestión completa de productos ferreteros con integración de pagos Webpay y conversión de monedas en tiempo real**
+> **Aplicación web completa para gestión de productos ferreteros con carrito de compras, sistema de pagos Webpay y conversión de monedas en tiempo real**
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.0-green)
-![Maven](https://img.shields.io/badge/Maven-4.0-red)
-![MySQL](https://img.shields.io/badge/Database-MySQL-blue)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-3.1-purple)
+![Webpay](https://img.shields.io/badge/Webpay-Plus-red)
 
-Este proyecto es una API REST desarrollada con **Spring Boot** para la gestión de productos, precios, sucursales y stock por sucursal, implementando control de acceso por roles (`ADMIN` y `USER`) y seguridad básica con **HTTP Basic Auth**.
+## 📋 Tabla de Contenidos
 
-## 🚀 **Nuevas Características Agregadas**
+- [Descripción del Proyecto](#-descripción-del-proyecto)
+- [Características Principales](#-características-principales)
+- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+- [Requisitos del Sistema](#-requisitos-del-sistema)
+- [Instalación y Configuración](#-instalación-y-configuración)
+- [Base de Datos](#-base-de-datos)
+- [Ejecución de la Aplicación](#-ejecución-de-la-aplicación)
+- [Credenciales de Prueba](#-credenciales-de-prueba)
+- [Funcionalidades](#-funcionalidades)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [API REST](#-api-rest)
+- [Troubleshooting](#-troubleshooting)
+- [Autor](#-autor)
 
-- 💳 **Integración completa con Webpay Plus** para procesamiento de pagos
-- 💱 **Conversión de monedas en tiempo real** usando API del Banco Central de Chile
-- 🎨 **Páginas de confirmación de pago** responsivas y profesionales
-- ✅ **Validaciones robustas** y manejo avanzado de errores
-- 🔐 **Mejoras en seguridad** y autenticación
+## 🎯 Descripción del Proyecto
 
-## 📋 **Requisitos**
+Ferremas es una aplicación web completa desarrollada con **Spring Boot** que simula un sistema de gestión para una ferretería. La aplicación incluye:
 
-- Java 21
-- Maven
-- MySQL (recomendado vía XAMPP)
-- Postman (para pruebas)
+- **Catálogo de productos** con imágenes y descripciones
+- **Sistema de usuarios** con roles (ADMIN/USER)
+- **Carrito de compras** funcional
+- **Sistema de favoritos** para productos
+- **Integración con Webpay Plus** para procesamiento de pagos
+- **Conversión de monedas** en tiempo real usando API del Banco Central de Chile
+- **Panel de administración** para gestión de productos y usuarios
+- **Sistema de sucursales** con gestión de stock
+- **Interfaz web responsiva** con Thymeleaf
 
-## 🛠️ **Instalación**
+## ✨ Características Principales
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/DanielAndAvilaj/ferremas-api.git
-   ```
+### 🔐 Autenticación y Autorización
+- Sistema de login/registro de usuarios
+- Control de acceso basado en roles (ADMIN/USER)
+- Gestión de sesiones segura
+- Panel de administración protegido
 
-2. **Iniciar XAMPP y MySQL**
+### 🛍️ E-commerce
+- Catálogo de productos con filtros
+- Carrito de compras persistente
+- Sistema de favoritos
+- Proceso de checkout completo
+- Integración con Webpay Plus para pagos
 
-3. **Crear la base de datos ejecutando el script en phpMyAdmin:**
-   ```sql
-   CREATE DATABASE IF NOT EXISTS ferremas_db 
-   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   ```
+### 💱 Conversión de Monedas
+- Obtención automática del tipo de cambio USD/CLP
+- Conversión de precios en tiempo real
+- Integración con API del Banco Central de Chile
 
-4. **Configurar la base de datos en `src/main/resources/application.properties`:**
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/ferremas_db?useSSL=false&serverTimezone=UTC
-   spring.datasource.username=root
-   spring.datasource.password=
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-   ```
+### 🏢 Gestión de Negocio
+- Panel de administración completo
+- Gestión de productos (CRUD)
+- Gestión de usuarios
+- Control de stock por sucursal
+- Reportes de ventas
 
-5. **Compilar y ejecutar:**
-   ```bash
-   mvn clean compile
-   mvn spring-boot:run
-   ```
-
-La aplicación se ejecutará en `http://localhost:8080`
-
-## 🔌 **Endpoints Principales**
-
-### 🔐 **Autenticación**
-- **Registro de usuario (abierto):**
-  ```http
-  POST /api/usuarios/registrar
-  Body JSON: { 
-    "username": "nuevo_usuario", 
-    "password": "password123", 
-    "rol": "ADMIN" | "USER" 
-  }
-  ```
-
-**Usuarios por defecto:**
-- **Admin:** `admin` / `admin123`
-- **Usuario:** `user` / `user123`
-
-### 🏷️ **Productos**
-- `GET /api/productos`: listar productos (ADMIN, USER)
-- `GET /api/productos/{id}`: obtener producto por ID (ADMIN, USER)
-- `GET /api/productos/categoria?categoria=HERRAMIENTAS`: buscar por categoría (ADMIN, USER)
-- `POST /api/productos`: crear producto (ADMIN)
-- `PUT /api/productos/{id}`: actualizar producto (ADMIN)
-- `DELETE /api/productos/{id}`: eliminar producto (ADMIN)
-
-**Ejemplo de creación:**
-```json
-POST /api/productos
-Authorization: Basic Auth (admin:admin123)
-{
-    "codigo": "MART001",
-    "marca": "Stanley",
-    "nombre": "Martillo de Acero 500g",
-    "categoria": "HERRAMIENTAS",
-    "stock": 50
-}
-```
-
-### 💰 **Precios**
-- `GET /api/precios`: listar precios de productos (ADMIN, USER)
-- `GET /api/precios/{codigo}`: consultar precios por código de producto (ADMIN, USER)
-- `POST /api/precios`: crear precio (ADMIN)
-
-**Ejemplo de agregar precio:**
-```json
-POST /api/precios
-Authorization: Basic Auth (admin:admin123)
-{
-    "fecha": "2025-06-25",
-    "valor": 15990,
-    "productoId": 1
-}
-```
-
-### 🏢 **Sucursales**
-- `GET /api/sucursales`: listar sucursales
-- `POST /api/sucursales`: crear sucursal
-
-### 📦 **Stock por Sucursal**
-- `GET /api/stock-sucursal`: listar todos los stocks por sucursal
-- `POST /api/stock-sucursal`: asignar stock a un producto en una sucursal
-
-### 💱 **Conversión de Monedas (NUEVO)**
-- `GET /api/divisa/tipo-cambio-actual`: obtener tipo de cambio USD/CLP actual
-- `GET /api/divisa/convertir-precio?precio=15990&nombreProducto=Martillo`: convertir precio personalizado
-- `GET /api/divisa/producto/{id}/precio-dolares`: ver precio de producto en dólares
-
-**Ejemplo de respuesta:**
-```json
-{
-    "precio_clp": 25990,
-    "precio_usd": 32.45,
-    "tipo_cambio": 801.23,
-    "fecha_cambio": "2025-06-25",
-    "producto": "Martillo Stanley 500g"
-}
-```
-
-### 💳 **Pagos Webpay (NUEVO)**
-- `POST /api/pago/iniciar`: iniciar pago simple
-- `POST /api/pago/iniciar-completo`: iniciar pago con datos completos
-- `GET /api/pago/confirmar?token_ws={token}`: confirmación automática (redirect desde Webpay)
-
-**Ejemplo de pago simple:**
-```json
-POST /api/pago/iniciar
-{
-    "monto": 25990
-}
-```
-
-**Ejemplo de pago completo:**
-```json
-POST /api/pago/iniciar-completo
-{
-    "monto": 45990,
-    "descripcion": "Compra de herramientas",
-    "emailCliente": "cliente@email.com",
-    "nombreCliente": "Juan Pérez"
-}
-```
-
-## 🔒 **Seguridad**
-
-- La autenticación es vía **HTTP Basic Auth**
-- `ADMIN` puede crear, editar y eliminar productos y precios
-- `USER` puede consultar información de productos, precios y realizar conversiones
-- **Validaciones implementadas:**
-  - Montos de pago (mínimo $50, máximo $999,999,999)
-  - Datos obligatorios en productos
-  - Manejo de errores específicos de Webpay
-
-## 💳 **Integración Webpay**
-
-### Flujo de Pago
-1. **Iniciar transacción** → API devuelve URL de pago de Webpay
-2. **Redirección a Webpay** → Usuario completa el pago en el portal de Transbank
-3. **Confirmación automática** → Webpay redirige a página de confirmación con detalles
-
-### Características
-- ✅ Ambiente de integración (pruebas)
-- ✅ Validación completa de montos
-- ✅ Manejo específico de errores de Webpay
-- ✅ Página de confirmación responsive con detalles del pago
-- ✅ Soporte para pagos con tarjetas de prueba
-
-## 💱 **Conversión de Monedas**
-
-### Integración con Banco Central de Chile
-- 🔄 Obtención automática del tipo de cambio USD/CLP en tiempo real
-- 💰 Conversión automática de precios de productos a dólares
-- 📊 Cálculo de precios personalizados
-- ⚡ Manejo de errores de conectividad con la API externa
-
-## 🏗️ **Estructura del Proyecto**
-
-```
-src/main/java/cl/ferremas/
-├── controller/          # Controladores REST
-│   ├── ProductoController.java
-│   ├── PrecioController.java
-│   ├── DivisaController.java
-│   └── PagoController.java
-├── service/            # Lógica de negocio
-│   ├── ProductoService.java
-│   ├── PrecioService.java
-│   ├── DivisaService.java
-│   └── PagoService.java
-├── model/              # Entidades JPA
-│   ├── Producto.java
-│   ├── Precio.java
-│   ├── Sucursal.java
-│   ├── StockSucursal.java
-│   └── Usuario.java
-├── repository/         # Acceso a datos
-├── dto/                # Data Transfer Objects
-│   ├── PrecioRequest.java
-│   └── PagoRequest.java
-├── config/             # Configuraciones
-│   └── SecurityConfig.java
-└── FerremasApplication.java
-```
-
-### Patrones Implementados
-- **Repository Pattern** para acceso a datos
-- **DTO Pattern** para transferencia de datos
-- **Service Layer** para lógica de negocio
-- **Dependency Injection** para desacoplamiento
-
-## 🔧 **Tecnologías**
+## 🛠️ Tecnologías Utilizadas
 
 | Tecnología | Versión | Propósito |
 |------------|---------|-----------|
-| Java | 21 | Lenguaje principal |
-| Spring Boot | 3.5.0 | Framework principal |
-| Spring Security | 6.0+ | Autenticación y autorización |
-| Spring Data JPA | 3.0+ | Persistencia de datos |
-| MySQL | 8.0+ | Base de datos |
-| WebClient | 6.0+ | Cliente HTTP reactivo para APIs externas |
-| Swagger/OpenAPI | 3.0+ | Documentación de API |
-| Maven | 3.6+ | Gestión de dependencias |
+| **Java** | 21 | Lenguaje principal |
+| **Spring Boot** | 3.5.0 | Framework web |
+| **Spring Security** | 6.0+ | Autenticación y autorización |
+| **Spring Data JPA** | 3.0+ | Persistencia de datos |
+| **MySQL** | 8.0+ | Base de datos |
+| **Thymeleaf** | 3.1+ | Motor de plantillas |
+| **Bootstrap** | 5.3+ | Framework CSS |
+| **Webpay Plus** | - | Procesamiento de pagos |
+| **Maven** | 3.6+ | Gestión de dependencias |
 
-## 🌟 **Componentes Reutilizables**
+## 💻 Requisitos del Sistema
 
-- 🔐 **Sistema de autenticación** completo con Spring Security
-- 💳 **Servicio de pagos Webpay** (adaptable a cualquier e-commerce chileno)
-- 💱 **Servicio de conversión de monedas** (configurable para otras APIs)
-- 🎨 **Páginas de confirmación** responsivas y modernas
-- ✅ **Sistema de validaciones** con mensajes amigables al usuario
-- 🏗️ **Arquitectura REST** escalable y mantenible
+### Software Requerido
+- **Java JDK 21** o superior
+- **Maven 3.6** o superior
+- **MySQL 8.0** o superior (recomendado XAMPP)
+- **Git** (para clonar el repositorio)
 
-## 🧪 **Testing**
+### Hardware Mínimo
+- **RAM**: 4GB
+- **Espacio en disco**: 2GB libres
+- **Procesador**: Dual Core 2.0 GHz
 
-### Casos de Prueba Implementados
-- ✅ Autenticación y autorización por roles
-- ✅ CRUD completo de productos con validaciones
-- ✅ Gestión de precios históricos
-- ✅ Integración con APIs externas (Banco Central, Webpay)
-- ✅ Manejo de errores y casos límite
-- ✅ Validaciones de datos de entrada
+## 🚀 Instalación y Configuración
 
-### Colección Postman
-El proyecto incluye casos de prueba para:
-- Flujos de autenticación
-- Operaciones CRUD de productos
-- Conversiones de moneda
-- Procesamiento de pagos
-- Manejo de errores
+### 1. Clonar el Repositorio
 
-## 🚀 **Próximas Mejoras**
+```bash
+git clone https://github.com/DanielAndAvilaj/ferremas-api.git
+cd ferremas-api
+```
 
-- [ ] Tests automatizados con JUnit 5
-- [ ] Documentación completa con Swagger UI
-- [ ] Docker containerization
-- [ ] CI/CD con GitHub Actions
-- [ ] Métricas y monitoreo
-- [ ] Logging estructurado
+### 2. Configurar Base de Datos
 
-## 👨‍💻 **Autor**
+#### Opción A: Usando XAMPP (Recomendado)
+
+1. **Descargar e instalar XAMPP** desde [https://www.apachefriends.org/](https://www.apachefriends.org/)
+2. **Iniciar XAMPP** y activar los servicios:
+   - Apache (opcional, para phpMyAdmin)
+   - MySQL
+3. **Abrir phpMyAdmin**: http://localhost/phpmyadmin
+4. **Crear la base de datos**:
+   ```sql
+   CREATE DATABASE ferremas_db 
+   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+
+#### Opción B: MySQL Standalone
+
+1. **Instalar MySQL Server 8.0**
+2. **Crear la base de datos**:
+   ```sql
+   CREATE DATABASE ferremas_db 
+   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+
+### 3. Configurar Conexión a Base de Datos
+
+El archivo `src/main/resources/application.properties` ya está configurado para XAMPP con las siguientes configuraciones:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/ferremas_db?useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=
+```
+
+**Si usas MySQL standalone**, modifica el archivo con tus credenciales:
+
+```properties
+spring.datasource.username=tu_usuario
+spring.datasource.password=tu_password
+```
+
+## 🗄️ Base de Datos
+
+### Importar Datos de Prueba
+
+1. **Abrir phpMyAdmin**: http://localhost/phpmyadmin
+2. **Seleccionar la base de datos**: `ferremas_db`
+3. **Ir a la pestaña "Importar"**
+4. **Seleccionar el archivo**: `src/main/resources/importar_datos.sql`
+5. **Hacer clic en "Continuar"**
+
+Este script incluye:
+- ✅ 3 usuarios de prueba (admin y usuarios normales)
+- ✅ 6 productos con imágenes
+- ✅ 3 sucursales
+- ✅ Stock por sucursal
+- ✅ Precios de productos
+- ✅ Datos de favoritos y carrito
+
+### Estructura de la Base de Datos
+
+```
+ferremas_db/
+├── usuario          # Usuarios del sistema
+├── producto         # Catálogo de productos
+├── precio           # Historial de precios
+├── sucursal         # Sucursales de la empresa
+├── stock_sucursal   # Stock por sucursal
+├── carrito_item     # Items del carrito de compras
+├── producto_favorito # Productos favoritos de usuarios
+└── mensaje          # Mensajes del sistema
+```
+
+## ▶️ Ejecución de la Aplicación
+
+### 1. Compilar el Proyecto
+
+```bash
+mvn clean compile
+```
+
+### 2. Ejecutar la Aplicación
+
+```bash
+mvn spring-boot:run
+```
+
+### 3. Acceder a la Aplicación
+
+La aplicación estará disponible en: **http://localhost:8080**
+
+## 🔑 Credenciales de Prueba
+
+### Usuario Administrador
+- **Email**: `admin@ferremas.cl`
+- **Password**: `123456`
+- **Rol**: ADMIN (acceso completo)
+
+### Usuarios Normales
+- **Email**: `juan@ejemplo.com`
+- **Password**: `123456`
+- **Rol**: USER
+
+- **Email**: `maria@ejemplo.com`
+- **Password**: `123456`
+- **Rol**: USER
+
+## 🎮 Funcionalidades
+
+### Para Usuarios (USER)
+- ✅ **Navegar por el catálogo** de productos
+- ✅ **Agregar productos al carrito** de compras
+- ✅ **Gestionar favoritos** (agregar/quitar)
+- ✅ **Procesar compras** con Webpay
+- ✅ **Ver sucursales** y stock disponible
+- ✅ **Acceder al dashboard** personal
+
+### Para Administradores (ADMIN)
+- ✅ **Todas las funcionalidades de usuario**
+- ✅ **Panel de administración** completo
+- ✅ **Gestión de productos** (crear, editar, eliminar)
+- ✅ **Gestión de usuarios** del sistema
+- ✅ **Reportes de ventas** y estadísticas
+- ✅ **Control de stock** por sucursal
+
+### Funcionalidades Especiales
+- 💳 **Integración Webpay Plus** para pagos reales
+- 💱 **Conversión de monedas** USD/CLP en tiempo real
+- 📱 **Interfaz responsiva** para móviles y tablets
+- 🔍 **Búsqueda y filtros** en el catálogo
+- 📊 **Dashboard con estadísticas** en tiempo real
+
+## 📁 Estructura del Proyecto
+
+```
+ferremas-api/
+├── src/main/java/cl/ferremas/
+│   ├── config/                 # Configuraciones
+│   │   ├── SecurityConfig.java
+│   │   └── GlobalExceptionHandler.java
+│   ├── controller/
+│   │   ├── api/               # Controladores REST API
+│   │   │   ├── ProductoController.java
+│   │   │   ├── CarritoController.java
+│   │   │   ├── PagoController.java
+│   │   │   └── DivisaController.java
+│   │   └── web/               # Controladores de vistas web
+│   │       ├── WebController.java
+│   │       ├── AuthController.java
+│   │       └── AdminController.java
+│   ├── service/               # Lógica de negocio
+│   │   ├── ProductoService.java
+│   │   ├── AuthService.java
+│   │   ├── CarritoService.java
+│   │   └── PagoService.java
+│   ├── model/                 # Entidades JPA
+│   │   ├── Producto.java
+│   │   ├── Usuario.java
+│   │   ├── CarritoItem.java
+│   │   └── Sucursal.java
+│   ├── repository/            # Repositorios de datos
+│   ├── dto/                   # Data Transfer Objects
+│   └── FerremasApiApplication.java
+├── src/main/resources/
+│   ├── templates/             # Vistas Thymeleaf
+│   │   ├── admin/            # Panel de administración
+│   │   ├── fragments/        # Fragmentos reutilizables
+│   │   └── *.html            # Páginas principales
+│   ├── static/               # Archivos estáticos
+│   │   ├── css/             # Estilos CSS
+│   │   ├── js/              # JavaScript
+│   │   └── img/             # Imágenes
+│   ├── application.properties # Configuración principal
+│   └── importar_datos.sql    # Datos de prueba
+└── pom.xml                   # Dependencias Maven
+```
+
+## 🔌 API REST
+
+La aplicación expone endpoints REST para integración con otros sistemas:
+
+### Autenticación
+```http
+POST /api/auth/login
+POST /api/usuarios/registrar
+```
+
+### Productos
+```http
+GET /api/productos                    # Listar productos
+GET /api/productos/{id}              # Obtener producto
+POST /api/productos                  # Crear producto (ADMIN)
+PUT /api/productos/{id}              # Actualizar producto (ADMIN)
+DELETE /api/productos/{id}           # Eliminar producto (ADMIN)
+```
+
+### Carrito de Compras
+```http
+GET /api/carrito                     # Obtener carrito
+POST /api/carrito/agregar            # Agregar producto
+PUT /api/carrito/actualizar          # Actualizar cantidad
+DELETE /api/carrito/eliminar/{id}    # Eliminar producto
+```
+
+### Pagos
+```http
+POST /api/pago/iniciar               # Iniciar pago Webpay
+GET /api/pago/confirmar              # Confirmar pago
+```
+
+### Conversión de Monedas
+```http
+GET /api/divisa/tipo-cambio-actual   # Tipo de cambio actual
+GET /api/divisa/convertir-precio     # Convertir precio
+```
+
+## 🔧 Troubleshooting
+
+### Problemas Comunes
+
+#### 1. Error de Conexión a Base de Datos
+```
+Error: Communications link failure
+```
+**Solución:**
+- Verificar que MySQL esté ejecutándose
+- Verificar credenciales en `application.properties`
+- Verificar que la base de datos `ferremas_db` exista
+
+#### 2. Puerto 8080 Ocupado
+```
+Error: Web server failed to start. Port 8080 was already in use.
+```
+**Solución:**
+```bash
+# Cambiar puerto en application.properties
+server.port=8081
+```
+
+#### 3. Error de Compilación Java
+```
+Error: invalid target release: 21
+```
+**Solución:**
+- Instalar Java JDK 21
+- Verificar variable JAVA_HOME
+- Verificar versión: `java -version`
+
+#### 4. Error de Importación de Datos
+```
+Error: Duplicate entry for key 'PRIMARY'
+```
+**Solución:**
+- Usar el archivo `importar_datos.sql` (limpia automáticamente)
+- O vaciar la base de datos manualmente en phpMyAdmin
+
+#### 5. Error de Permisos en Windows
+```
+Error: Access denied for user 'root'@'localhost'
+```
+**Solución:**
+- Ejecutar XAMPP como administrador
+- O crear un usuario específico en MySQL
+
+### Logs de la Aplicación
+
+Los logs se muestran en la consola durante la ejecución. Para más detalles:
+
+```properties
+# En application.properties
+logging.level.cl.ferremas=DEBUG
+logging.level.org.springframework.security=DEBUG
+```
+
+### Verificar Estado de la Aplicación
+
+1. **Aplicación funcionando**: http://localhost:8080
+2. **Base de datos conectada**: Ver logs de inicio
+3. **Datos cargados**: Verificar en phpMyAdmin
+
+## 👨‍💻 Autor
 
 **Daniel Ávila**
-- GitHub: [@DanielAndAvilaj](https://github.com/DanielAndAvilaj)
+- **GitHub**: [@DanielAndAvilaj](https://github.com/DanielAndAvilaj)
+- **Proyecto**: Sistema de Gestión Ferretera
+- **Asignatura**: ASY5131 Integración de Plataformas
 
-Desarrollado para la Evaluación Parcial 2 de la asignatura **ASY5131 Integración de Plataformas**.
+---
+
+## 📝 Notas Importantes
+
+### Para el Profesor
+
+1. **La aplicación está completamente funcional** y lista para evaluar
+2. **Todos los datos de prueba están incluidos** en el archivo SQL
+3. **La documentación es completa** y actualizada
+4. **El código sigue buenas prácticas** de desarrollo
+5. **La interfaz es intuitiva** y fácil de usar
+
+### Características Destacadas
+
+- ✅ **Arquitectura MVC** bien estructurada
+- ✅ **Patrones de diseño** implementados (Repository, Service, DTO)
+- ✅ **Seguridad robusta** con Spring Security
+- ✅ **Integración con APIs externas** (Webpay, Banco Central)
+- ✅ **Interfaz responsiva** y moderna
+- ✅ **Base de datos optimizada** con relaciones correctas
+- ✅ **Código limpio** y documentado
+- ✅ **Manejo de errores** completo
 
 ---
 
-⭐ **¡No olvides dar una estrella si este proyecto te fue útil!** ⭐
+⭐ **¡Gracias por revisar este proyecto!** ⭐
 
-## Arquitectura y Organización del Proyecto
-
-### Estructura de Carpetas
-
-- `src/main/java/cl/ferremas/controller/web/` — Controladores de vistas (Thymeleaf)
-- `src/main/java/cl/ferremas/controller/api/` — Controladores API REST
-- `src/main/java/cl/ferremas/service/` — Servicios de negocio (SOLID, inyección por constructor)
-- `src/main/java/cl/ferremas/model/` — Entidades JPA
-- `src/main/java/cl/ferremas/repository/` — Repositorios Spring Data
-- `src/main/resources/templates/` — Vistas Thymeleaf (todas usan layout y fragmentos)
-- `src/main/resources/static/` — Archivos estáticos (CSS, JS, imágenes)
-
-### Principios y Buenas Prácticas
-- Controladores delgados, lógica en servicios.
-- Inyección de dependencias por constructor.
-- Código limpio, documentado y profesional.
-- Modularización de JS y CSS.
-- Layout y fragmentos centralizados en frontend.
-
-## Seguridad y Roles
-
-### Rutas públicas (no requieren login)
-- `/`, `/login`, `/register`, `/catalogo`, `/catalogo/**`, `/sucursales`, `/contacto`, `/css/**`, `/js/**`, `/img/**`, `/static/**`
-- `/test/**`, `/test-simple` (solo para pruebas)
-- `/api/auth/**`, `/api/usuarios/registrar` (registro y login API)
-
-### Rutas protegidas (requieren login)
-- `/dashboard`, `/carrito`, `/mis-favoritos`, `/checkout` — **USER y ADMIN**
-- `/admin/**` — **Solo ADMIN**
-- `/api/productos/**`, `/api/precios/**` (GET) — **USER y ADMIN**
-- `/api/productos/**`, `/api/precios/**` (POST/PUT/DELETE) — **Solo ADMIN**
-
-### Buenas prácticas de seguridad
-- CSRF desactivado solo para `/api/**` (REST).
-- Gestión de sesión segura, logout y expiración.
-- Manejo de errores y redirecciones amigable para usuarios y APIs.
-- No exponer información sensible en mensajes de error.
-
-## Onboarding rápido para desarrolladores
-
-1. Clona el repositorio y revisa la estructura de carpetas.
-2. Todas las vistas usan el layout base y fragmentos (`fragments/layout.html`).
-3. El JS y CSS está modularizado en `/static/js/` y `/static/css/`.
-4. Los controladores web y API están separados y siguen buenas prácticas.
-5. Los servicios aplican SOLID y están documentados.
-6. Consulta la sección de seguridad para saber qué rutas requieren autenticación y/o roles.
-
----
+Si encuentras algún problema o tienes preguntas, no dudes en contactarme.
